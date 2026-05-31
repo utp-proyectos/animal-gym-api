@@ -13,12 +13,17 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import pe.edu.utp.animal_gym_api.common.enums.Role;
 import pe.edu.utp.animal_gym_api.domain.person.Person;
 
 @Entity
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+
 @Table(name = "users")
 
 public class User {
