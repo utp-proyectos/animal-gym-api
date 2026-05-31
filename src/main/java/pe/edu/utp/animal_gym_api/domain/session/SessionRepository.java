@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface SessionRepository extends JpaRepository<Session, Long> {
-	List<Session> findByEmpleado_PersonaId(Long personId);
+	List<Session> findByEmployee_Id(Long id);
 }
