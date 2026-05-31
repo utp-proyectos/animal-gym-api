@@ -40,7 +40,7 @@ public class User {
 	private Role role;
 
 	@OneToOne
-	@JoinColumn(name = "id")
+	@JoinColumn(name = "person_id")
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Person person;
 }
