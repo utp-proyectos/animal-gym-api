@@ -7,15 +7,16 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import pe.edu.utp.animal_gym_api.domain.user.User;
+import pe.edu.utp.animal_gym_api.domain.user.UserRepository;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 	@Autowired
-	// private UsuarioRepository usuarioRepository;
+	private UserRepository userRepository;
 
 	@Override
 	public UserDetails loadUserByUsername(String dni) throws UsernameNotFoundException {
-		User usuario = usuarioRepository.findByPersona_Dni(dni)
+		User usuario = userRepository.findByPerson_Dni(dni)
 				.orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
 
 		return org.springframework.security.core.userdetails.User.builder()
