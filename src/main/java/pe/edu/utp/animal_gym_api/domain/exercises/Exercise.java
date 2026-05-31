@@ -22,7 +22,7 @@ public class Exercise {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "exercise_id")
-	private Integer id;
+	private Long id;
 
 	@Column(name = "name", nullable = false, length = 50)
 	private String name;
