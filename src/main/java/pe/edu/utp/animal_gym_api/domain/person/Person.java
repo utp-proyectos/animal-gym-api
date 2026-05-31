@@ -32,8 +32,8 @@ import lombok.NoArgsConstructor;
 public abstract class Person {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "person_id")
-	protected Integer personId;
+	@Column(name = "id")
+	protected Integer id;
 
 	@Column(name = "dni", unique = true, nullable = false, length = 8)
 	protected String dni;
