@@ -33,7 +33,7 @@ public abstract class Person {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	protected Integer id;
+	protected Long id;
 
 	@Column(name = "dni", unique = true, nullable = false, length = 8)
 	protected String dni;
