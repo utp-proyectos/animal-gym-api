@@ -17,11 +17,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-// @Inheritance(strategy = InheritanceType.JOINED)
-// @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "tipo")
+@Inheritance(strategy = InheritanceType.JOINED)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "tipo")
 // @JsonSubTypes({
-// 		@JsonSubTypes.Type(value = Socio.class, name = "socio"),
-// 		@JsonSubTypes.Type(value = Empleado.class, name = "empleado") })
+// @JsonSubTypes.Type(value = Socio.class, name = "socio"),
+// @JsonSubTypes.Type(value = Empleado.class, name = "empleado") })
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -32,30 +32,30 @@ import lombok.NoArgsConstructor;
 public abstract class Person {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "persona_id")
-	protected Integer personaId;
+	@Column(name = "person_id")
+	protected Integer personId;
 
 	@Column(name = "dni", unique = true, nullable = false, length = 8)
 	protected String dni;
 
-	@Column(name = "nombre", nullable = false, length = 20)
-	protected String nombre;
+	@Column(name = "first_name", nullable = false, length = 20)
+	protected String firstName;
 
-	@Column(name = "apellido", nullable = false, length = 30)
-	protected String apellido;
+	@Column(name = "last_name", nullable = false, length = 30)
+	protected String lastName;
 
-	@Column(name = "telefono", unique = true, nullable = false, length = 9)
-	protected String telefono;
+	@Column(name = "phone_number", unique = true, nullable = false, length = 9)
+	protected String phoneNumber;
 
-	@Column(name = "genero", nullable = false, length = 20)
-	protected String genero;
+	@Column(name = "gender", nullable = false, length = 20)
+	protected String gender;
 
 	@Column(name = "email", unique = true, nullable = false, length = 100)
 	protected String email;
 
-	@Column(name = "fecha_nacimiento", nullable = false)
-	protected LocalDate fechaNacimiento;
+	@Column(name = "birth_date", nullable = false)
+	protected LocalDate birthDate;
 
-	@Column(name = "fecha_ingreso", nullable = false)
-	protected LocalDate fechaIngreso;
+	@Column(name = "hire_date", nullable = false)
+	protected LocalDate hireDate;
 }
