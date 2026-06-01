@@ -37,12 +37,12 @@ public class Partner extends Person {
 	@Column(name = "image")
 	private String image;
 
-	// @ManyToOne
-	// @JoinColumn(name = "membership_id")
-	// @OnDelete(action = OnDeleteAction.SET_NULL)
-	// private Membership membership;
+	@ManyToOne
+	@JoinColumn(name = "membership_id")
+	@OnDelete(action = OnDeleteAction.SET_NULL)
+	private Membership membership;
 
-	// @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	// @JoinColumn(name = "partner_id")
-	// private List<Routine> routines = new ArrayList<>();
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "partner_id")
+	private List<Routine> routines = new ArrayList<>();
 }
