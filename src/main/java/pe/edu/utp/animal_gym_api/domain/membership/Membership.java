@@ -22,7 +22,6 @@ import lombok.Setter;
 @Entity
 @Table(name = "memberships")
 public class Membership {
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "membership_id")
