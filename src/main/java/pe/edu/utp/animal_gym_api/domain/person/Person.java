@@ -16,12 +16,14 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import pe.edu.utp.animal_gym_api.domain.employee.Employee;
+import pe.edu.utp.animal_gym_api.domain.partner.Partner;
 
 @Inheritance(strategy = InheritanceType.JOINED)
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "tipo")
-// @JsonSubTypes({
-// @JsonSubTypes.Type(value = Socio.class, name = "socio"),
-// @JsonSubTypes.Type(value = Empleado.class, name = "empleado") })
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+@JsonSubTypes({
+		@JsonSubTypes.Type(value = Partner.class, name = "partner"),
+		@JsonSubTypes.Type(value = Employee.class, name = "employee") })
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
