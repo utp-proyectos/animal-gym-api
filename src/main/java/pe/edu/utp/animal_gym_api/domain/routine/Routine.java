@@ -10,7 +10,6 @@ import org.hibernate.annotations.OnDeleteAction;
 import jakarta.persistence.*;
 import lombok.*;
 import pe.edu.utp.animal_gym_api.domain.employee.Employee;
-import pe.edu.utp.animal_gym_api.domain.routineDetail.RoutineDetail;
 
 @Data
 @AllArgsConstructor
