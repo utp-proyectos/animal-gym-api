@@ -14,4 +14,6 @@ public interface EmployeeService {
 	EmployeeResponseDTO save(EmployeeUser dto);
 
 	void delete(Long id);
+
+	EmployeeResponseDTO update(Long id, EmployeeUser dto);
 }
