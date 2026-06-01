@@ -39,13 +39,13 @@ public class Partner extends Person {
 	private boolean status;
 
 	@Column(name = "points")
-	private int points;
+	private Integer points;
 
 	@Column(name = "weight")
-	private double weight;
+	private Double weight;
 
 	@Column(name = "height")
-	private double height;
+	private Double height;
 
 	@Column(name = "image")
 	private String image;
