@@ -20,7 +20,7 @@ import pe.edu.utp.animal_gym_api.domain.employee.Employee;
 import pe.edu.utp.animal_gym_api.domain.partner.Partner;
 
 @Inheritance(strategy = InheritanceType.JOINED)
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "tipo")
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonSubTypes({
 		@JsonSubTypes.Type(value = Partner.class, name = "partner"),
 		@JsonSubTypes.Type(value = Employee.class, name = "employee") })
