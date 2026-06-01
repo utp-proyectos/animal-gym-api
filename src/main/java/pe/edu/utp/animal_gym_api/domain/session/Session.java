@@ -2,8 +2,12 @@ package pe.edu.utp.animal_gym_api.domain.session;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import pe.edu.utp.animal_gym_api.domain.employee.Employee;
+import pe.edu.utp.animal_gym_api.domain.sessionBooking.SessionBooking;
+
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -61,9 +65,9 @@ public class Session {
 	@OnDelete(action = OnDeleteAction.SET_NULL)
 	private Employee employee;
 
-	// @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	// @JoinColumn(name = "session_id")
-	// private List<SessionBooking> bookings = new ArrayList<>();
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "session_id")
+	private List<SessionBooking> bookings = new ArrayList<>();
 
 	@Transient
 	private Boolean enrolled;
