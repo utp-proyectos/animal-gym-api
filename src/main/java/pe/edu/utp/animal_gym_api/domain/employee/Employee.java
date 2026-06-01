@@ -31,4 +31,5 @@ public class Employee extends Person {
 
 	@Column(name = "specialty", length = 60)
 	private String specialty;
+
 }
