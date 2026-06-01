@@ -7,7 +7,7 @@ import pe.edu.utp.animal_gym_api.domain.bill.dto.BillRequestDTO;
 import pe.edu.utp.animal_gym_api.domain.bill.dto.BillResponseDTO;
 
 @Mapper(componentModel = "spring")
-public interface BoletaMapper {
+public interface BillMapper {
 	@Mapping(target = "id", ignore = true)
 	@Mapping(target = "partner", ignore = true)
 	@Mapping(target = "employee", ignore = true)
