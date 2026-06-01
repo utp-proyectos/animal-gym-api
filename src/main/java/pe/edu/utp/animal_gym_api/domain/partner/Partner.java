@@ -15,14 +15,19 @@ import jakarta.persistence.Table;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.AllArgsConstructor;
+
+import pe.edu.utp.animal_gym_api.domain.membership.Membership;
 import pe.edu.utp.animal_gym_api.domain.person.Person;
+import pe.edu.utp.animal_gym_api.domain.routine.Routine;
 
 @Entity
 @Table(name = "partners")
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class Partner extends Person {
@@ -34,13 +39,13 @@ public class Partner extends Person {
 	private boolean status;
 
 	@Column(name = "points")
-	private int points;
+	private Integer points;
 
 	@Column(name = "weight")
-	private double weight;
+	private Double weight;
 
 	@Column(name = "height")
-	private double height;
+	private Double height;
 
 	@Column(name = "image")
 	private String image;
