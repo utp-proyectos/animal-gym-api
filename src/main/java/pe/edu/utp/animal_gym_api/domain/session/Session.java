@@ -20,7 +20,7 @@ public class Session {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "session_id")
+	@Column(name = "id")
 	private Long id;
 
 	@Column(name = "name", nullable = false, length = 50)
