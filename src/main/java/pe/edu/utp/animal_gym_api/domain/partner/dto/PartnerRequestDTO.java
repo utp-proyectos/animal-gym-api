@@ -25,4 +25,6 @@ public class PartnerRequestDTO {
 	private Double height;
 	private String image;
 	private Long membershipId;
+	private String password;
+	private Role role;
 }
