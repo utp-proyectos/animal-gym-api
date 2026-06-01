@@ -5,13 +5,13 @@ import java.util.Date;
 import javax.crypto.SecretKey;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import pe.edu.utp.animal_gym_api.domain.user.User;
 
 @Service
 public class JwtService {
@@ -22,23 +22,17 @@ public class JwtService {
 	@Value("${jwt.expiration}")
 	private long expiration;
 
-	public String generateToken(User user) {
+	public String generateToken(Authentication auth) {
 		return Jwts.builder()
-				.subject(user.getId().toString())
-				.claim("email", user.getPerson().getEmail())
-				.claim("role", user.getRole().name())
+				.subject(auth.getName())
 				.issuedAt(new Date())
 				.expiration(new Date(System.currentTimeMillis() + expiration))
 				.signWith(getKey())
 				.compact();
 	}
 
-	public String extractUserId(String token) {
+	public String extractDni(String token) {
 		return getClaims(token).getSubject();
-	}
-
-	public String extractEmail(String token) {
-		return getClaims(token).get("email", String.class);
 	}
 
 	public boolean isValid(String token) {
