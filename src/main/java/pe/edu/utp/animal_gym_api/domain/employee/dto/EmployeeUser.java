@@ -2,11 +2,10 @@ package pe.edu.utp.animal_gym_api.domain.employee.dto;
 
 import java.time.LocalDate;
 
-import javax.management.relation.Role;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import pe.edu.utp.animal_gym_api.common.enums.Role;
 
 @Data
 @AllArgsConstructor
