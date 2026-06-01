@@ -3,13 +3,13 @@ package pe.edu.utp.animal_gym_api.domain.bill.dto;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
 @Data
-@Getter
-@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 
 public class BillResponseDTO {
 	private Long id;
