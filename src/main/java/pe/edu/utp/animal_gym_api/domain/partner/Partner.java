@@ -22,8 +22,7 @@ import pe.edu.utp.animal_gym_api.domain.person.Person;
 
 @Entity
 @Table(name = "partners")
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class Partner extends Person {
