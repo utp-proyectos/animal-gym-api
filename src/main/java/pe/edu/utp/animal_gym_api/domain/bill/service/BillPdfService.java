@@ -4,6 +4,16 @@ import java.io.ByteArrayOutputStream;
 
 import org.springframework.stereotype.Service;
 
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.PdfPCell;
+
 import pe.edu.utp.animal_gym_api.domain.bill.dto.BillResponseDTO;
 
 @Service

@@ -64,4 +64,26 @@ public class EmployeeServiceImpl implements EmployeeService {
 		employeeRepository.deleteById(id);
 	}
 
+	@Override
+	@Transactional
+
+	public EmployeeResponseDTO update(Long id, EmployeeUser dto) {
+		Employee employee = employeeMapper.toEntity(dto);
+		employee.setId(id); // con el id hace UPDATE no INSERT
+		employeeRepository.save(employee);
+
+		User user = userRepository.findByPersonId(id)
+				.orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+		user.setRole(dto.getRole());
+		user.setPassword(dto.getPassword());
+		userRepository.save(user);
+
+		return new EmployeeResponseDTO(
+				employee.getId(),
+				employee.getFirstName(),
+				employee.getLastName(),
+				employee.getImage(),
+				user.getRole());
+	}
+
 }
