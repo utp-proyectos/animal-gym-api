@@ -81,7 +81,7 @@ public class SessionServiceImpl implements SessionService {
 	@Override
 	public void deleteById(Long id) {
 		if (!sessionRepository.existsById(id)) {
-			throw new RuntimeException("No se puede eliminar: No existe la sesión con ID: " + id);
+			throw new EntityNotFoundException("No se puede eliminar: No existe la sesión con ID: " + id);
 		}
 		sessionRepository.deleteById(id);
 	}
