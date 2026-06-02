@@ -19,6 +19,7 @@ public interface RoutineMapper {
 	@Mapping(source = "exercise.equipment", target = "equipment")
 	RoutineDetailResponseDTO toDetailResponseDto(RoutineDetail entity);
 
+	// llegara como null
 	@Mapping(target = "role", ignore = true)
 	EmployeeResponseDTO toResponseEmployeeDto(Employee employee);
 }
