@@ -1,7 +1,6 @@
 package pe.edu.utp.animal_gym_api.domain.session.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import pe.edu.utp.animal_gym_api.domain.session.Session;
 import pe.edu.utp.animal_gym_api.domain.session.dto.SessionCardDTO;

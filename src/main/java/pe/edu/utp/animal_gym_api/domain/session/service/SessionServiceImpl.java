@@ -1,10 +1,10 @@
 package pe.edu.utp.animal_gym_api.domain.session.service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -92,8 +92,15 @@ public class SessionServiceImpl implements SessionService {
 		Session session = sessionRepository.findById(sessionId)
 				.orElseThrow(() -> new RuntimeException("Session not found"));
 
+		// Validar capacidad
 		if (session.getBookings().size() >= session.getCapacity()) {
-			throw new RuntimeException("Session is full");
+			throw new DataIntegrityViolationException("La sesión ha alcanzado su capacidad máxima.");
+		}
+
+		// Validar que el partner no esté ya inscrito (Evitar duplicados)
+		boolean alreadyEnrolled = isPartnerEnrolled(session, booking.getPartner().getId());
+		if (alreadyEnrolled) {
+			throw new DataIntegrityViolationException("El socio ya se encuentra inscrito en esta sesión.");
 		}
 
 		SessionBooking newBooking = sessionBookingRepository.save(booking);
