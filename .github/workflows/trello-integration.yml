@@ -60,7 +60,7 @@ jobs:
           CARD_ID=$(echo "$CARD_RESPONSE" | jq -r '.id')
           echo "Tarjeta creada en Trello con ID: $CARD_ID"
 
-          HAS_CHECKBOXES=$(echo "$RAW_BODY" | grep -E '^[[:space:]]*-[[:space:]]\[[[:space:]]\]')
+          HAS_CHECKBOXES=$(echo "$RAW_BODY" | grep -E '^[[:space:]]*-[[:space:]]\[[[:space:]]\]' || true)
 
           if [ ! -z "$HAS_CHECKBOXES" ]; then
             CHECKLIST_RESPONSE=$(curl --silent --request POST \
@@ -76,7 +76,7 @@ jobs:
                   --url "https://api.trello.com/1/checklists/$CHECKLIST_ID/checkItems?key=${{ secrets.TRELLO_API_KEY }}&token=${{ secrets.TRELLO_TOKEN }}" \
                   --data-urlencode "name=$subtask"
               fi
-            done
+            done || true
           fi
 
           if [ ! -z "$ASSIGNEE" ]; then
