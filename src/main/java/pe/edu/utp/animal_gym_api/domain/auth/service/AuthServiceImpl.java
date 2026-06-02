@@ -1,4 +1,4 @@
-package pe.edu.utp.animal_gym_api.domain.auth;
+package pe.edu.utp.animal_gym_api.domain.auth.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -43,6 +43,12 @@ public class AuthServiceImpl implements AuthService {
 				user.getPerson().getEmail(),
 				"",
 				user.getRole());
+	}
+
+	@Override
+	public User getCurrentUser(String dni) {
+		return userRepository.findByPerson_Dni(dni)
+				.orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado"));
 	}
 
 }
