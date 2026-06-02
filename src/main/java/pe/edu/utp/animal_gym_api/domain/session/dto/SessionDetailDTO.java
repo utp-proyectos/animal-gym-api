@@ -2,6 +2,7 @@ package pe.edu.utp.animal_gym_api.domain.session.dto;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,4 +28,5 @@ public class SessionDetailDTO {
 	private EmployeeResponseDTO employee;
 	private Integer currentBookings;
 	private Boolean enrolled;
+	private List<SessionParticipantDTO> participants;
 }
