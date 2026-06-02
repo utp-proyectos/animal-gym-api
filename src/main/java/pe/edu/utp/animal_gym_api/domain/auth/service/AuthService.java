@@ -1,4 +1,4 @@
-package pe.edu.utp.animal_gym_api.domain.auth;
+package pe.edu.utp.animal_gym_api.domain.auth.service;
 
 import pe.edu.utp.animal_gym_api.domain.auth.dto.AuthResponse;
 import pe.edu.utp.animal_gym_api.domain.auth.dto.LoginRequest;
