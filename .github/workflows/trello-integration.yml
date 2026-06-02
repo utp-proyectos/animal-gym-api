@@ -24,10 +24,10 @@ jobs:
           BODY_WITHOUT_CHECKBOXES=$(echo "$RAW_BODY" | grep -v -E '^[[:space:]]*-[[:space:]]\[[ xX]\]')
 
           if [ ! -z "$BODY_WITHOUT_CHECKBOXES" ]; then
-            DESC="$BODY_WITHOUT_CHECKBOXES\n"
+            DESC="$BODY_WITHOUT_CHECKBOXES"
           fi
 
-          DESC="$DESC\nCreado desde GitHub: ${{ github.event.issue.html_url }}"
+          DESC="$DESC\n\nCreado desde GitHub: ${{ github.event.issue.html_url }}"
 
           LIST_ID="6a1c57e93ed699f54dd3b9fa"
           TRELLO_LABELS=""
