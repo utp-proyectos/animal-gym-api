@@ -36,8 +36,8 @@ jobs:
             TRELLO_LABELS="6a1e7d7f5d2be7da4396d3af"
           fi
 
-          URL="https://api.trello.com/1/cards?idList=${LIST_ID}&key=${{ secrets.TRELLO_API_KEY }}&token=${{ secrets.TRELLO_TOKEN }}"
-          
+          URL="https://api.trello.com/1/cards?idList=$LIST_ID&key=${{ secrets.TRELLO_API_KEY }}&token=${{ secrets.TRELLO_TOKEN }}"
+
           if [ "$MILESTONE_DUE" != "null" ] && [ ! -z "$MILESTONE_DUE" ]; then
             URL="${URL}&due=${MILESTONE_DUE}"
           fi
