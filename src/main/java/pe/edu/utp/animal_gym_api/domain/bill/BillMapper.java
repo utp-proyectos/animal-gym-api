@@ -13,10 +13,10 @@ public interface BillMapper {
 	@Mapping(target = "employee", ignore = true)
 	Bill toEntity(BillRequestDTO dto);
 
-	@Mapping(target = "employeeFirstName", source = "bill.employee.firstName")
-	@Mapping(target = "employeeLastName", source = "bill.employee.lastName")
-	@Mapping(target = "partnerFirstName", source = "bill.partner.firstName")
-	@Mapping(target = "partnerLastName", source = "bill.partner.lastName")
-	@Mapping(target = "membershipName", source = "bill.partner.membership.name")
+	@Mapping(target = "employeeFirstName", source = "employee.firstName")
+	@Mapping(target = "employeeLastName", source = "employee.lastName")
+	@Mapping(target = "partnerFirstName", source = "partner.firstName")
+	@Mapping(target = "partnerLastName", source = "partner.lastName")
+	@Mapping(target = "membershipName", source = "partner.membership.name")
 	BillResponseDTO toResponseDto(Bill bill);
 }
