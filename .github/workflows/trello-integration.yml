@@ -28,12 +28,14 @@ jobs:
           LIST_ID="6a1c57e93ed699f54dd3b9fa"
           TRELLO_LABELS=""
 
-          HAS_FIX_LABEL=$(echo '$ISSUE_LABELS' | jq '.[] | select(.name == "fix")' -p 2>/dev/null)
+					if [ ! -z "$ISSUE_LABELS" ] && [ "$ISSUE_LABELS" != "[]" ]; then
+            HAS_FIX_LABEL=$(echo "$ISSUE_LABELS" | jq '.[] | select(.name == "fix")' 2>/dev/null)
 
-          if [ ! -z "$HAS_FIX_LABEL" ]; then
-            echo "Se detectó la label 'fix'. Cambiando destino..."
-            LIST_ID="6a1e7d4c86dea4cdff414042"
-            TRELLO_LABELS="6a1e7d7f5d2be7da4396d3af"
+            if [ ! -z "$HAS_FIX_LABEL" ]; then
+              echo "Se detectó la label 'fix'. Cambiando destino..."
+              LIST_ID="6a1e7d4c86dea4cdff414042"
+              TRELLO_LABELS="6a1e7d7f5d2be7da4396d3af"
+            fi
           fi
 
           URL="https://api.trello.com/1/cards?idList=$LIST_ID&key=${{ secrets.TRELLO_API_KEY }}&token=${{ secrets.TRELLO_TOKEN }}"
