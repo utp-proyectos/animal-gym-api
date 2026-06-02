@@ -28,7 +28,7 @@ jobs:
           LIST_ID="6a1c57e93ed699f54dd3b9fa"
           TRELLO_LABELS=""
 
-					if [ ! -z "$ISSUE_LABELS" ] && [ "$ISSUE_LABELS" != "[]" ]; then
+          if [ ! -z "$ISSUE_LABELS" ] && [ "$ISSUE_LABELS" != "[]" ]; then
             HAS_FIX_LABEL=$(echo "$ISSUE_LABELS" | jq '.[] | select(.name == "fix")' 2>/dev/null)
 
             if [ ! -z "$HAS_FIX_LABEL" ]; then
