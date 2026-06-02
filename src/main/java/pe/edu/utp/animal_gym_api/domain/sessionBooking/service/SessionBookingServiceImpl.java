@@ -28,7 +28,7 @@ public class SessionBookingServiceImpl implements SessionBookingService {
 	@Override
 	public List<SessionBooking> findByPartnerId(Long partnerId) {
 		if (!partnerRepository.existsById(partnerId)) {
-			throw new RuntimeException("Partner not found with ID: " + partnerId);
+			throw new EntityNotFoundException("Partner not found with ID: " + partnerId);
 		}
 		return sessionBookingRepository.findByPartner_Id(partnerId);
 	}
@@ -64,7 +64,7 @@ public class SessionBookingServiceImpl implements SessionBookingService {
 	public void cancel(Long partnerId, Long sessionId) {
 		// Validamos existencia antes de borrar
 		if (!sessionBookingRepository.existsByPartner_IdAndSession_Id(partnerId, sessionId)) {
-			throw new RuntimeException("No booking found for this partner in the specified session.");
+			throw new EntityNotFoundException("No booking found for this partner in the specified session.");
 		}
 
 		sessionBookingRepository.deleteByPartnerIdAndSessionId(partnerId, sessionId);
