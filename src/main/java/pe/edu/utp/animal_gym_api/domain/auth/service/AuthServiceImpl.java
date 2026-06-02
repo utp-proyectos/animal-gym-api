@@ -6,7 +6,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
-import pe.edu.utp.animal_gym_api.common.exception.ResourceNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import pe.edu.utp.animal_gym_api.domain.auth.dto.AuthResponse;
 import pe.edu.utp.animal_gym_api.domain.auth.dto.LoginRequest;
 import pe.edu.utp.animal_gym_api.domain.user.User;
@@ -30,7 +30,7 @@ public class AuthServiceImpl implements AuthService {
 				.authenticate(new UsernamePasswordAuthenticationToken(request.getDni(), request.getPassword()));
 
 		User user = userRepository.findByPerson_Dni(auth.getName())
-				.orElseThrow(() -> new ResourceNotFoundException("Credenciales invalidas"));
+				.orElseThrow(() -> new EntityNotFoundException("Credenciales invalidas"));
 
 		String token = jwtService.generateToken(auth);
 
@@ -48,7 +48,7 @@ public class AuthServiceImpl implements AuthService {
 	@Override
 	public User getCurrentUser(String dni) {
 		return userRepository.findByPerson_Dni(dni)
-				.orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado"));
+				.orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado"));
 	}
 
 }
