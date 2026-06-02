@@ -27,7 +27,7 @@ jobs:
             DESC="$BODY_WITHOUT_CHECKBOXES\n\n"
           fi
 
-          DESC="Creado desde GitHub: ${{ github.event.issue.html_url }}"
+          DESC="${{DESC}}Creado desde GitHub: ${{ github.event.issue.html_url }}"
 
           LIST_ID="6a1c57e93ed699f54dd3b9fa"
           TRELLO_LABELS=""
