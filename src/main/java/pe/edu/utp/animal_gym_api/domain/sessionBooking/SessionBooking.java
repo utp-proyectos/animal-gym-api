@@ -4,13 +4,13 @@ import java.time.LocalDate;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import org.springframework.boot.actuate.web.exchanges.HttpExchange.Session;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.*;
 import lombok.*;
 import pe.edu.utp.animal_gym_api.domain.partner.Partner;
+import pe.edu.utp.animal_gym_api.domain.session.Session;
 
 @Data
 @NoArgsConstructor
