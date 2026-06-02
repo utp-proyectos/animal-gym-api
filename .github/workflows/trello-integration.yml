@@ -19,11 +19,15 @@ jobs:
           CARD_NAME="${{ github.event.issue.title }} (#${{ github.event.issue.number }})"
           ASSIGNEE="${{ github.event.issue.assignee.login }}"
           MILESTONE_DUE="${{ github.event.issue.milestone.due_on }}"
+          DESC=""
+
+          BODY_WITHOUT_CHECKBOXES=$(echo "$RAW_BODY" | grep -v -E '^[[:space:]]*-[[:space:]]\[[ xX]\]')
+
+          if [ ! -z "$BODY_WITHOUT_CHECKBOXES" ]; then
+            DESC="$BODY_WITHOUT_CHECKBOXES\n\n"
+          fi
 
           DESC="Creado desde GitHub: ${{ github.event.issue.html_url }}"
-          if [ ! -z "$ASSIGNEE" ]; then
-            DESC="$DESC\nAsignado a: @$ASSIGNEE"
-          fi
 
           LIST_ID="6a1c57e93ed699f54dd3b9fa"
           TRELLO_LABELS=""
