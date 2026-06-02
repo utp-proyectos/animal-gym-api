@@ -14,6 +14,7 @@ jobs:
         if: github.event_name == 'issues' && github.event.action == 'opened'
         env:
           RAW_BODY: ${{ github.event.issue.body }}
+          ISSUE_LABELS: ${{ toJson(github.event.issue.labels) }}
         run: |
           CARD_NAME="${{ github.event.issue.title }} (#${{ github.event.issue.number }})"
           ASSIGNEE="${{ github.event.issue.assignee.login }}"
@@ -24,9 +25,25 @@ jobs:
             DESC="$DESC\nAsignado a: @$ASSIGNEE"
           fi
 
-          URL="https://api.trello.com/1/cards?idList=6a1c57e93ed699f54dd3b9fa&key=${{ secrets.TRELLO_API_KEY }}&token=${{ secrets.TRELLO_TOKEN }}"
+          LIST_ID="6a1c57e93ed699f54dd3b9fa"
+          TRELLO_LABELS=""
+
+          HAS_FIX_LABEL=$(echo '$ISSUE_LABELS' | jq '.[] | select(.name == "fix")' -p 2>/dev/null)
+
+          if [ ! -z "$HAS_FIX_LABEL" ]; then
+            echo "Se detectó la label 'fix'. Cambiando destino..."
+            LIST_ID="6a1e7d4c86dea4cdff414042"
+            TRELLO_LABELS="6a1e7d7f5d2be7da4396d3af"
+          fi
+
+          URL="https://api.trello.com/1/cards?idList=${LIST_ID}&key=${{ secrets.TRELLO_API_KEY }}&token=${{ secrets.TRELLO_TOKEN }}"
+          
           if [ "$MILESTONE_DUE" != "null" ] && [ ! -z "$MILESTONE_DUE" ]; then
             URL="${URL}&due=${MILESTONE_DUE}"
+          fi
+
+          if [ ! -z "$TRELLO_LABELS" ]; then
+            URL="${URL}&idLabels=${TRELLO_LABELS}"
           fi
 
           CARD_RESPONSE=$(curl --silent --request POST \
