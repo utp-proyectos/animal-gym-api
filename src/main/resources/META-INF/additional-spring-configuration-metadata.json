@@ -9,6 +9,11 @@
 			"name": "jwt.expiration",
 			"type": "java.lang.String",
 			"description": "A description for 'jwt.expiration'"
+		},
+		{
+			"name": "frontend.url",
+			"type": "java.lang.String",
+			"description": "A description for 'frontend.url'"
 		}
 	]
 }
