@@ -21,7 +21,7 @@ jobs:
           MILESTONE_DUE="${{ github.event.issue.milestone.due_on }}"
           DESC=""
 
-          BODY_WITHOUT_CHECKBOXES=$(echo "$RAW_BODY" | grep -v -E '^[[:space:]]*-[[:space:]]\[[ xX]\]')
+          BODY_WITHOUT_CHECKBOXES=$(echo "$RAW_BODY" | sed -E '/^[[:space:]]*-[[:space:]]\[[ xX]\]/d' | xargs -0)
 
           if [ ! -z "$BODY_WITHOUT_CHECKBOXES" ]; then
             DESC="$BODY_WITHOUT_CHECKBOXES"
