@@ -46,13 +46,14 @@ public class SessionServiceImpl implements SessionService {
 	}
 
 	@Override
-	public Optional<SessionDetailDTO> findById(Long id, Long currentPartnerId) {
+	public SessionDetailDTO findById(Long id, Long currentPartnerId) {
 		return sessionRepository.findById(id)
 				.map(session -> {
 					SessionDetailDTO dto = sessionMapper.toDetailDTO(session);
 					dto.setEnrolled(isPartnerEnrolled(session, currentPartnerId));
 					return dto;
-				});
+				})
+				.orElseThrow(() -> new EntityNotFoundException("No se encontró la clase con el ID: " + id));
 	}
 
 	@Override
@@ -79,6 +80,9 @@ public class SessionServiceImpl implements SessionService {
 
 	@Override
 	public void deleteById(Long id) {
+		if (!sessionRepository.existsById(id)) {
+			throw new EntityNotFoundException("No se puede eliminar: No existe la sesión con ID: " + id);
+		}
 		sessionRepository.deleteById(id);
 	}
 

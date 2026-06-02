@@ -11,7 +11,7 @@ import pe.edu.utp.animal_gym_api.domain.sessionBooking.SessionBooking;
 public interface SessionService {
 	List<SessionCardDTO> findAll(Long currentPartnerId);
 
-	Optional<SessionDetailDTO> findById(Long id, Long currentPartnerId);
+	SessionDetailDTO findById(Long id, Long currentPartnerId);
 
 	SessionDetailDTO save(Session session);
 
