@@ -81,7 +81,7 @@ public class SessionServiceImpl implements SessionService {
 	@Override
 	public void deleteById(Long id) {
 		if (!sessionRepository.existsById(id)) {
-			throw new EntityNotFoundException("No se puede eliminar: No existe la sesión con ID: " + id);
+			throw new RuntimeException("No se puede eliminar: No existe la sesión con ID: " + id);
 		}
 		sessionRepository.deleteById(id);
 	}
@@ -90,14 +90,14 @@ public class SessionServiceImpl implements SessionService {
 	@Transactional
 	public SessionDetailDTO addBooking(Long sessionId, SessionBooking booking) {
 		Session session = sessionRepository.findById(sessionId)
-				.orElseThrow(() -> new RuntimeException("Session not found"));
+				.orElseThrow(() -> new EntityNotFoundException("Session not found with ID: " + sessionId));
 
-		// Validar capacidad
+		// Validar capacidad (Lanzamos DataIntegrity para que el Handler devuelva 400)
 		if (session.getBookings().size() >= session.getCapacity()) {
 			throw new DataIntegrityViolationException("La sesión ha alcanzado su capacidad máxima.");
 		}
 
-		// Validar que el partner no esté ya inscrito (Evitar duplicados)
+		// Validar duplicados
 		boolean alreadyEnrolled = isPartnerEnrolled(session, booking.getPartner().getId());
 		if (alreadyEnrolled) {
 			throw new DataIntegrityViolationException("El socio ya se encuentra inscrito en esta sesión.");
@@ -116,7 +116,7 @@ public class SessionServiceImpl implements SessionService {
 	@Transactional
 	public SessionDetailDTO removeBooking(Long sessionId, Long bookingId) {
 		Session session = sessionRepository.findById(sessionId)
-				.orElseThrow(() -> new RuntimeException("Session not found"));
+				.orElseThrow(() -> new EntityNotFoundException("Session not found"));
 
 		// Buscamos la reserva en la lista de la sesión
 		boolean removed = session.getBookings().removeIf(b -> b.getId().equals(bookingId));
