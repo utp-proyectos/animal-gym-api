@@ -14,9 +14,16 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
 	Optional<Employee> findByDni(String dni);
 
-	// @Query("SELECT new
-	// pe.edu.utp.animal_gym_api.dto.employee.DtoCardEmployee(e.firstName,
-	// e.lastName, u.role) " +
-	// "FROM Employee e JOIN User u ON u.person.id = e.id")
-	// List<EmployeeResponseDTO> findAllCardEmployees();
+	@Query("""
+			SELECT new pe.edu.utp.animal_gym_api.domain.employee.dto.EmployeeResponseDTO(
+			    TREAT(u.person AS Employee).id,
+			    TREAT(u.person AS Employee).firstName,
+			    TREAT(u.person AS Employee).lastName,
+			    TREAT(u.person AS Employee).image,
+			    u.role
+			)
+			FROM User u
+			WHERE TYPE(u.person) = Employee
+			""")
+	List<EmployeeResponseDTO> findAllCardEmployees();
 }
