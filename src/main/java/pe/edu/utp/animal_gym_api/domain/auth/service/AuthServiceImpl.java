@@ -32,17 +32,31 @@ public class AuthServiceImpl implements AuthService {
 		User user = userRepository.findByPerson_Dni(auth.getName())
 				.orElseThrow(() -> new EntityNotFoundException("Credenciales invalidas"));
 
-		String token = jwtService.generateToken(auth);
+		System.out.println("------------------------------ ");
 
-		return new AuthResponse(
+		System.out.println("Usuario autenticado: " + auth.getName());
+		System.out.println("Usuario autenticado: " + user.getPerson().getFirstName());
+		System.out.println("------------------------------ ");
+
+		String token = jwtService.generateToken(auth);
+		System.out.println("Token generado: " + token);
+		System.out.println("------------------------------ ");
+
+		AuthResponse r = new AuthResponse(
 				token,
-				auth.getName(),
+				user.getId(),
 				user.getPerson().getDni(),
 				user.getPerson().getFirstName(),
 				user.getPerson().getLastName(),
 				user.getPerson().getEmail(),
 				"",
 				user.getRole());
+		System.out.println("------------------------------ ");
+		System.out.println("respuesta: " + r);
+		System.out.println("respuesta: " + r.getDni());
+		System.out.println("------------------------------ ");
+
+		return r;
 	}
 
 	@Override

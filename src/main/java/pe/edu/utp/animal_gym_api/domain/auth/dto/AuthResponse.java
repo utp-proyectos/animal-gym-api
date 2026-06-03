@@ -10,7 +10,7 @@ import pe.edu.utp.animal_gym_api.common.enums.Role;
 @AllArgsConstructor
 public class AuthResponse {
 	private String token;
-	private String id;
+	private Long id;
 	private String dni;
 	private String firstName;
 	private String lastName;
