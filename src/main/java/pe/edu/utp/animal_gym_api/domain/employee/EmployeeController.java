@@ -2,6 +2,7 @@ package pe.edu.utp.animal_gym_api.domain.employee;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import lombok.RequiredArgsConstructor;
 import pe.edu.utp.animal_gym_api.common.response.ApiResponse;
 import pe.edu.utp.animal_gym_api.domain.employee.dto.EmployeeResponseDTO;
 import pe.edu.utp.animal_gym_api.domain.employee.dto.EmployeeResponseDetailDTO;
@@ -22,10 +22,10 @@ import pe.edu.utp.animal_gym_api.domain.employee.service.EmployeeService;
 
 @RestController
 @RequestMapping("/api/employees")
-@RequiredArgsConstructor
 public class EmployeeController {
 
-	private final EmployeeService employeeService;
+	@Autowired
+	private EmployeeService employeeService;
 
 	@GetMapping
 	public ResponseEntity<ApiResponse<List<EmployeeResponseDTO>>> findAll() {
