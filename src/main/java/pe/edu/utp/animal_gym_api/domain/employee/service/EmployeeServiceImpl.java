@@ -3,6 +3,7 @@ package pe.edu.utp.animal_gym_api.domain.employee.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -19,6 +20,8 @@ import pe.edu.utp.animal_gym_api.domain.user.UserRepository;
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
 
+	private final PasswordEncoder passwordEncoder;
+
 	@Autowired
 	private EmployeeRepository employeeRepository;
 
@@ -27,6 +30,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Autowired
 	private EmployeeMapper employeeMapper;
+
+	EmployeeServiceImpl(PasswordEncoder passwordEncoder) {
+		this.passwordEncoder = passwordEncoder;
+	}
 
 	@Override
 	public List<EmployeeResponseDTO> findAll() {
@@ -51,17 +58,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 		employeeRepository.save(employee);
 
 		User user = new User();
-		user.setPassword(dto.getPassword());
+		user.setPassword(passwordEncoder.encode(dto.getPassword()));
 		user.setRole(dto.getRole());
 		user.setPerson(employee);
 		userRepository.save(user);
 
-		return new EmployeeResponseDTO(
-				employee.getId(),
-				employee.getFirstName(),
-				employee.getLastName(),
-				employee.getImage(),
-				user.getRole());
+		return employeeMapper.toResponseDto(employee, user.getRole());
 	}
 
 	@Override
@@ -80,15 +82,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 		User user = userRepository.findByPersonId(id)
 				.orElseThrow(() -> new EntityNotFoundException("User not found with ID: " + id));
 		user.setRole(dto.getRole());
-		user.setPassword(dto.getPassword());
+		user.setPassword(passwordEncoder.encode(dto.getPassword()));
 		userRepository.save(user);
 
-		return new EmployeeResponseDTO(
-				employee.getId(),
-				employee.getFirstName(),
-				employee.getLastName(),
-				employee.getImage(),
-				user.getRole());
+		return employeeMapper.toResponseDto(employee, user.getRole());
+
 	}
 
 }

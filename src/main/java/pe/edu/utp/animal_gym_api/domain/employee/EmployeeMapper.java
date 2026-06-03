@@ -4,6 +4,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 import pe.edu.utp.animal_gym_api.common.enums.Role;
+import pe.edu.utp.animal_gym_api.domain.employee.dto.EmployeeResponseDTO;
 import pe.edu.utp.animal_gym_api.domain.employee.dto.EmployeeResponseDetailDTO;
 import pe.edu.utp.animal_gym_api.domain.employee.dto.EmployeeUser;
 
@@ -11,6 +12,9 @@ import pe.edu.utp.animal_gym_api.domain.employee.dto.EmployeeUser;
 public interface EmployeeMapper {
 	@Mapping(target = "id", ignore = true)
 	Employee toEntity(EmployeeUser dto);
+
+	@Mapping(target = "role", source = "role")
+	EmployeeResponseDTO toResponseDto(Employee employee, Role role);
 
 	@Mapping(target = "role", source = "role")
 	@Mapping(target = "id", source = "employee.id")
