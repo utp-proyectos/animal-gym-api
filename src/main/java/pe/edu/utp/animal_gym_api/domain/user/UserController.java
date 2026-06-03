@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import pe.edu.utp.animal_gym_api.common.response.ApiResponse;
 import pe.edu.utp.animal_gym_api.domain.user.service.UserService;
 
 @RestController
@@ -18,12 +19,14 @@ public class UserController {
 	private UserService userService;
 
 	@PatchMapping("/{id}/password")
-	public ResponseEntity<Void> changePassword(
+	public ResponseEntity<ApiResponse<Void>> changePassword(
 			@PathVariable Long id,
 			@RequestBody UserPasswordDTO dto) {
 
 		userService.changePassword(id, dto);
 
-		return ResponseEntity.noContent().build();
+		return ResponseEntity.ok(
+				ApiResponse.ok("Password updated successfully", null));
 	}
+
 }
