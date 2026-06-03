@@ -12,13 +12,13 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class PartnerRequestDTO {
 	private String dni;
-	private String name;
+	private String firstName;
 	private String lastName;
-	private String phone;
+	private String phoneNumber;
 	private String gender;
 	private String email;
 	private LocalDate birthDate;
-	private LocalDate joinDate;
+	private LocalDate hireDate;
 	private LocalDate expirationDate;
 	private Boolean status;
 	private Integer points;
