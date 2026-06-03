@@ -26,7 +26,7 @@ public class Employee extends Person {
 	private String image;
 
 	@Column(name = "salary", nullable = false)
-	private double salary;
+	private Double salary;
 
 	@Column(name = "contract_type", nullable = false, length = 50)
 	private String contractType;
