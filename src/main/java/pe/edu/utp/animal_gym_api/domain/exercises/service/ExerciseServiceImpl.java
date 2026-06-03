@@ -2,18 +2,18 @@ package pe.edu.utp.animal_gym_api.domain.exercises.service;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import jakarta.persistence.EntityNotFoundException;
-import lombok.RequiredArgsConstructor;
 import pe.edu.utp.animal_gym_api.domain.exercises.Exercise;
 import pe.edu.utp.animal_gym_api.domain.exercises.ExerciseRepository;
 
 @Service
-@RequiredArgsConstructor
 public class ExerciseServiceImpl implements ExerciseService {
 
-	private final ExerciseRepository exerciseRepository;
+	@Autowired
+	private ExerciseRepository exerciseRepository;
 
 	@Override
 	public List<Exercise> findAll() {

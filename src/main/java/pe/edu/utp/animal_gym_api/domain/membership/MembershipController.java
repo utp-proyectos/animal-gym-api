@@ -2,11 +2,11 @@ package pe.edu.utp.animal_gym_api.domain.membership;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import lombok.RequiredArgsConstructor;
 import pe.edu.utp.animal_gym_api.common.response.ApiResponse;
 import pe.edu.utp.animal_gym_api.domain.membership.dto.MembershipRequestDTO;
 import pe.edu.utp.animal_gym_api.domain.membership.dto.MembershipResponseDTO;
@@ -14,10 +14,10 @@ import pe.edu.utp.animal_gym_api.domain.membership.service.MembershipService;
 
 @RestController
 @RequestMapping("/api/memberships")
-@RequiredArgsConstructor
 public class MembershipController {
 
-	private final MembershipService membershipService;
+	@Autowired
+	private MembershipService membershipService;
 
 	@GetMapping
 	public ResponseEntity<ApiResponse<List<MembershipResponseDTO>>> findAll() {

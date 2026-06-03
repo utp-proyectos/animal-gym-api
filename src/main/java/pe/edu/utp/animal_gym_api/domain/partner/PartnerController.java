@@ -3,12 +3,12 @@ package pe.edu.utp.animal_gym_api.domain.partner;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import lombok.RequiredArgsConstructor;
 import pe.edu.utp.animal_gym_api.common.response.ApiResponse;
 import pe.edu.utp.animal_gym_api.domain.partner.dto.PartnerDetailDTO;
 import pe.edu.utp.animal_gym_api.domain.partner.dto.PartnerRequestDTO;
@@ -17,10 +17,9 @@ import pe.edu.utp.animal_gym_api.domain.partner.service.PartnerService;
 
 @RestController
 @RequestMapping("/api/partners")
-@RequiredArgsConstructor
 public class PartnerController {
-
-	private final PartnerService partnerService;
+	@Autowired
+	private PartnerService partnerService;
 
 	@GetMapping
 	public ResponseEntity<ApiResponse<List<PartnerResponseDTO>>> findAll() {

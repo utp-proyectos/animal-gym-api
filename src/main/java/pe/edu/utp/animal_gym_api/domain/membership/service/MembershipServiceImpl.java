@@ -6,11 +6,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.persistence.EntityNotFoundException;
-import lombok.RequiredArgsConstructor;
 import pe.edu.utp.animal_gym_api.domain.membership.Membership;
 import pe.edu.utp.animal_gym_api.domain.membership.MembershipRepository;
 import pe.edu.utp.animal_gym_api.domain.membership.dto.MembershipRequestDTO;
@@ -18,11 +18,11 @@ import pe.edu.utp.animal_gym_api.domain.membership.dto.MembershipResponseDTO;
 import pe.edu.utp.animal_gym_api.domain.membership.mapper.MembershipMapper;
 
 @Service
-@RequiredArgsConstructor
 public class MembershipServiceImpl implements MembershipService {
-
-	private final MembershipRepository membershipRepository;
-	private final MembershipMapper membershipMapper;
+	@Autowired
+	private MembershipRepository membershipRepository;
+	@Autowired
+	private MembershipMapper membershipMapper;
 
 	@Override
 	public List<MembershipResponseDTO> findAll() {

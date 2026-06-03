@@ -3,13 +3,12 @@ package pe.edu.utp.animal_gym_api.domain.partner.service;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import io.jsonwebtoken.security.Password;
 import jakarta.persistence.EntityNotFoundException;
-import lombok.RequiredArgsConstructor;
 import pe.edu.utp.animal_gym_api.domain.membership.Membership;
 import pe.edu.utp.animal_gym_api.domain.membership.MembershipRepository;
 import pe.edu.utp.animal_gym_api.domain.partner.Partner;
@@ -22,14 +21,18 @@ import pe.edu.utp.animal_gym_api.domain.user.User;
 import pe.edu.utp.animal_gym_api.domain.user.UserRepository;
 
 @Service
-@RequiredArgsConstructor
 public class PartnerServiceImpl implements PartnerService {
 
-    private final PartnerRepository partnerRepository;
-    private final MembershipRepository membershipRepository;
-    private final UserRepository userRepository;
-    private final PartnerMapper mapper;
-    private final PasswordEncoder passwordEncoder;
+    @Autowired
+    private PartnerRepository partnerRepository;
+    @Autowired
+    private MembershipRepository membershipRepository;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private PartnerMapper mapper;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public List<PartnerResponseDTO> findAll() {
