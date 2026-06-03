@@ -2,11 +2,11 @@ package pe.edu.utp.animal_gym_api.domain.employee.service;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
 import pe.edu.utp.animal_gym_api.domain.employee.Employee;
 import pe.edu.utp.animal_gym_api.domain.employee.EmployeeMapper;
 import pe.edu.utp.animal_gym_api.domain.employee.EmployeeRepository;
@@ -17,12 +17,14 @@ import pe.edu.utp.animal_gym_api.domain.user.User;
 import pe.edu.utp.animal_gym_api.domain.user.UserRepository;
 
 @Service
-@RequiredArgsConstructor
 public class EmployeeServiceImpl implements EmployeeService {
 
-	private final EmployeeRepository employeeRepository;
-	private final UserRepository userRepository;
-	private final EmployeeMapper employeeMapper;
+	@Autowired
+	private EmployeeRepository employeeRepository;
+	@Autowired
+	private UserRepository userRepository;
+	@Autowired
+	private EmployeeMapper employeeMapper;
 
 	@Override
 	public List<EmployeeResponseDTO> findAll() {
