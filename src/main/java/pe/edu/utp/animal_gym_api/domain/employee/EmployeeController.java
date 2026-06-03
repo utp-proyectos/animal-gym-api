@@ -2,6 +2,7 @@ package pe.edu.utp.animal_gym_api.domain.employee;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import lombok.RequiredArgsConstructor;
+import pe.edu.utp.animal_gym_api.common.response.ApiResponse;
 import pe.edu.utp.animal_gym_api.domain.employee.dto.EmployeeResponseDTO;
 import pe.edu.utp.animal_gym_api.domain.employee.dto.EmployeeResponseDetailDTO;
 import pe.edu.utp.animal_gym_api.domain.employee.dto.EmployeeUser;
@@ -21,35 +22,41 @@ import pe.edu.utp.animal_gym_api.domain.employee.service.EmployeeService;
 
 @RestController
 @RequestMapping("/api/employees")
-@RequiredArgsConstructor
-
 public class EmployeeController {
 
-	private final EmployeeService employeeService;
+	@Autowired
+	private EmployeeService employeeService;
 
 	@GetMapping
-	public ResponseEntity<List<EmployeeResponseDTO>> findAll() {
-		return ResponseEntity.ok(employeeService.findAll());
+	public ResponseEntity<ApiResponse<List<EmployeeResponseDTO>>> findAll() {
+		List<EmployeeResponseDTO> employees = employeeService.findAll();
+		return ResponseEntity.ok(ApiResponse.ok("Employees retrieved successfully", employees));
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<EmployeeResponseDetailDTO> findById(@PathVariable Long id) {
-		return ResponseEntity.ok(employeeService.findById(id));
+	public ResponseEntity<ApiResponse<EmployeeResponseDetailDTO>> findById(@PathVariable Long id) {
+		EmployeeResponseDetailDTO employee = employeeService.findById(id);
+		return ResponseEntity.ok(ApiResponse.ok("Employee found", employee));
 	}
 
 	@PostMapping
-	public ResponseEntity<EmployeeResponseDTO> save(@RequestBody EmployeeUser dto) {
-		return ResponseEntity.status(HttpStatus.CREATED).body(employeeService.save(dto));
+	public ResponseEntity<ApiResponse<EmployeeResponseDTO>> save(@RequestBody EmployeeUser dto) {
+		EmployeeResponseDTO saved = employeeService.save(dto);
+		return ResponseEntity.status(HttpStatus.CREATED)
+				.body(ApiResponse.ok("Employee created successfully", saved));
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<EmployeeResponseDTO> update(@PathVariable Long id, @RequestBody EmployeeUser dto) {
-		return ResponseEntity.ok(employeeService.update(id, dto));
+	public ResponseEntity<ApiResponse<EmployeeResponseDTO>> update(
+			@PathVariable Long id,
+			@RequestBody EmployeeUser dto) {
+		EmployeeResponseDTO updated = employeeService.update(id, dto);
+		return ResponseEntity.ok(ApiResponse.ok("Employee updated successfully", updated));
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> delete(@PathVariable Long id) {
+	public ResponseEntity<ApiResponse<Void>> delete(@PathVariable Long id) {
 		employeeService.delete(id);
-		return ResponseEntity.noContent().build();
+		return ResponseEntity.ok(ApiResponse.ok("Employee deleted successfully", null));
 	}
 }

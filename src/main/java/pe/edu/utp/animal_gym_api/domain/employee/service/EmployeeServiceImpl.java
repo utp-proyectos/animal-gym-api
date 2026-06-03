@@ -23,9 +23,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 	private EmployeeRepository employeeRepository;
 
 	@Autowired
-	private  UserRepository userRepository;
+	private UserRepository userRepository;
 
-	private  EmployeeMapper employeeMapper;
+	@Autowired
+	private EmployeeMapper employeeMapper;
 
 	@Override
 	public List<EmployeeResponseDTO> findAll() {
