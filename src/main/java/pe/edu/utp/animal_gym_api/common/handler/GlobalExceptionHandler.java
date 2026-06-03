@@ -1,5 +1,6 @@
 package pe.edu.utp.animal_gym_api.common.handler;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,10 +33,10 @@ public class GlobalExceptionHandler {
 	}
 
 	@ExceptionHandler(AuthenticationException.class)
-  public ResponseEntity<ApiResponse<Void>> handleAuthenticationException(AuthenticationException ex) {
-    return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-        .body(ApiResponse.error("Acceso no autorizado"));
-  }
+	public ResponseEntity<ApiResponse<Void>> handleAuthenticationException(AuthenticationException ex) {
+		return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+				.body(ApiResponse.error("Acceso no autorizado"));
+	}
 
 	@ExceptionHandler(AccessDeniedException.class)
 	public ResponseEntity<ApiResponse<Void>> handleAccessDeniedException(AccessDeniedException ex) {
@@ -115,6 +116,13 @@ public class GlobalExceptionHandler {
 	}
 
 	// Genericos
+	@ExceptionHandler(IOException.class)
+	public ResponseEntity<ApiResponse<Void>> handleIOException(IOException ex) {
+		return ResponseEntity
+				.status(HttpStatus.INTERNAL_SERVER_ERROR)
+				.body(ApiResponse.error("Error de entrada/salida: " + ex.getMessage()));
+	}
+
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<ApiResponse<Void>> handleGeneric(Exception ex) {
 		return ResponseEntity
