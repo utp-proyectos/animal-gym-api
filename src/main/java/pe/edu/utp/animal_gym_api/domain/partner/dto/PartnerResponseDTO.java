@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PartnerResponseDTO {
-	private Long id;
+    private Long id;
     private String dni;
     private String firstName;
     private String lastName;
@@ -18,7 +18,7 @@ public class PartnerResponseDTO {
     private String email;
     private String image;
     private Boolean status;
-    private LocalDate joinDate;
+    private LocalDate hireDate;
     private Long membershipId;
     private String membershipName;
 }
