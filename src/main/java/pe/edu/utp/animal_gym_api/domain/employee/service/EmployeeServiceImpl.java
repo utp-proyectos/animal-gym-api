@@ -25,7 +25,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public List<EmployeeResponseDTO> findAll() {
-		return employeeRepository.findAllCardEmployees();
+		// return employeeRepository.findAllCardEmployees();
+		return null;
 	}
 
 	@Override

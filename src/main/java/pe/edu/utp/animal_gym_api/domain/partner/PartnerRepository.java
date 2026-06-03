@@ -18,7 +18,7 @@ public interface PartnerRepository extends JpaRepository<Partner, Long> {
 
 	List<Partner> findByMembershipId(Long membershipId);
 
-	@Query("SELECT p FROM Partner p WHERE LOWER(CONCAT(p.name, ' ', p.lastName)) LIKE LOWER(CONCAT('%', :name, '%'))")
+	@Query("SELECT p FROM Partner p WHERE LOWER(CONCAT(p.firstName, ' ', p.lastName)) LIKE LOWER(CONCAT('%', :name, '%'))")
 	List<Partner> findByNameContainingIgnoreCase(@Param("name") String name);
 
 	Long countByStatusTrue();

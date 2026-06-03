@@ -1,0 +1,13 @@
+package pe.edu.utp.animal_gym_api.domain.sessionBooking.service;
+
+import java.util.List;
+
+import pe.edu.utp.animal_gym_api.domain.sessionBooking.SessionBooking;
+
+public interface SessionBookingService {
+	List<SessionBooking> findByPartnerId(Long partnerId);
+
+	void subscribe(Long partnerId, Long sessionId);
+
+	void cancel(Long partnerId, Long sessionId);
+}
