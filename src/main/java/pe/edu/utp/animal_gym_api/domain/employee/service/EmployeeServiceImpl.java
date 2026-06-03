@@ -20,7 +20,8 @@ import pe.edu.utp.animal_gym_api.domain.user.UserRepository;
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
 
-	private final PasswordEncoder passwordEncoder;
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	@Autowired
 	private EmployeeRepository employeeRepository;
@@ -30,10 +31,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Autowired
 	private EmployeeMapper employeeMapper;
-
-	EmployeeServiceImpl(PasswordEncoder passwordEncoder) {
-		this.passwordEncoder = passwordEncoder;
-	}
 
 	@Override
 	public List<EmployeeResponseDTO> findAll() {
@@ -82,7 +79,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 		User user = userRepository.findByPersonId(id)
 				.orElseThrow(() -> new EntityNotFoundException("User not found with ID: " + id));
 		user.setRole(dto.getRole());
-		user.setPassword(passwordEncoder.encode(dto.getPassword()));
 		userRepository.save(user);
 
 		return employeeMapper.toResponseDto(employee, user.getRole());
