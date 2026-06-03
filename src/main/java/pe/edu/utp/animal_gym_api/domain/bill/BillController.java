@@ -1,6 +1,8 @@
 package pe.edu.utp.animal_gym_api.domain.bill;
 
 import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 
@@ -13,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import lombok.RequiredArgsConstructor;
+import pe.edu.utp.animal_gym_api.common.response.ApiResponse;
 import pe.edu.utp.animal_gym_api.domain.bill.dto.BillRequestDTO;
 import pe.edu.utp.animal_gym_api.domain.bill.dto.BillResponseDTO;
 import pe.edu.utp.animal_gym_api.domain.bill.service.BillPdfService;
@@ -21,26 +23,31 @@ import pe.edu.utp.animal_gym_api.domain.bill.service.BillService;
 
 @RestController
 @RequestMapping("/api/bills")
-@RequiredArgsConstructor
-
 public class BillController {
 
-	private final BillService billService;
-	private final BillPdfService billPdfService;
+	@Autowired
+	private BillService billService;
+
+	@Autowired
+	private BillPdfService billPdfService;
 
 	@GetMapping
-	public ResponseEntity<List<BillResponseDTO>> findAll() {
-		return ResponseEntity.ok(billService.findAll());
+	public ResponseEntity<ApiResponse<List<BillResponseDTO>>> findAll() {
+		List<BillResponseDTO> bills = billService.findAll();
+		return ResponseEntity.ok(ApiResponse.ok("Bills retrieved successfully", bills));
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<BillResponseDTO> findById(@PathVariable Long id) {
-		return ResponseEntity.ok(billService.findById(id));
+	public ResponseEntity<ApiResponse<BillResponseDTO>> findById(@PathVariable Long id) {
+		BillResponseDTO bill = billService.findById(id);
+		return ResponseEntity.ok(ApiResponse.ok("Bill found", bill));
 	}
 
 	@PostMapping
-	public ResponseEntity<BillResponseDTO> save(@RequestBody BillRequestDTO dto) {
-		return ResponseEntity.status(HttpStatus.CREATED).body(billService.save(dto));
+	public ResponseEntity<ApiResponse<BillResponseDTO>> save(@RequestBody BillRequestDTO dto) {
+		BillResponseDTO saved = billService.save(dto);
+		return ResponseEntity.status(HttpStatus.CREATED)
+				.body(ApiResponse.ok("Bill created successfully", saved));
 	}
 
 	@GetMapping("/{id}/pdf")
