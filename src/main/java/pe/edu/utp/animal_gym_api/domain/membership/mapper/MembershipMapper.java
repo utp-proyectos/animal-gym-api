@@ -11,6 +11,10 @@ import pe.edu.utp.animal_gym_api.domain.membership.dto.MembershipResponseDTO;
 @Mapper(componentModel = "spring")
 public interface MembershipMapper {
 
+	@Mapping(target = "active", ignore = true)
+	@Mapping(target = "expired", ignore = true)
+	@Mapping(target = "remainingDays", ignore = true)
+	@Mapping(target = "enrolledMembers", ignore = true)
 	@Mapping(target = "id", ignore = true)
 	Membership toEntity(MembershipRequestDTO requestDTO);
 
