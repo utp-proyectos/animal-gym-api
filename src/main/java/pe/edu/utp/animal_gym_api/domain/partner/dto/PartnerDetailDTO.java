@@ -21,7 +21,7 @@ public class PartnerDetailDTO {
     private String gender;
     private String email;
     private LocalDate birthDate;
-    private LocalDate joinDate;
+    private LocalDate hireDate;
     private LocalDate expirationDate;
     private Boolean status;
     private Integer points;
