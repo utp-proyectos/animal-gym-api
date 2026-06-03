@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import pe.edu.utp.animal_gym_api.domain.employee.Employee;
@@ -21,21 +22,20 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	private final EmployeeRepository employeeRepository;
 	private final UserRepository userRepository;
-	private EmployeeMapper employeeMapper;
+	private final EmployeeMapper employeeMapper;
 
 	@Override
 	public List<EmployeeResponseDTO> findAll() {
-		// return employeeRepository.findAllCardEmployees();
-		return null;
+		return employeeRepository.findAllCardEmployees();
 	}
 
 	@Override
 	public EmployeeResponseDetailDTO findById(Long id) {
 		Employee employee = employeeRepository.findById(id)
-				.orElseThrow(() -> new RuntimeException("Empleado no encontrado"));
+				.orElseThrow(() -> new EntityNotFoundException("Employee not found with ID: " + id));
 
 		User user = userRepository.findByPersonId(id)
-				.orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+				.orElseThrow(() -> new EntityNotFoundException("User not found with ID: " + id));
 
 		return employeeMapper.toDetailDto(employee, user.getRole());
 	}
@@ -70,11 +70,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	public EmployeeResponseDTO update(Long id, EmployeeUser dto) {
 		Employee employee = employeeMapper.toEntity(dto);
-		employee.setId(id); // con el id hace UPDATE no INSERT
+		employee.setId(id);
 		employeeRepository.save(employee);
 
 		User user = userRepository.findByPersonId(id)
-				.orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+				.orElseThrow(() -> new EntityNotFoundException("User not found with ID: " + id));
 		user.setRole(dto.getRole());
 		user.setPassword(dto.getPassword());
 		userRepository.save(user);
