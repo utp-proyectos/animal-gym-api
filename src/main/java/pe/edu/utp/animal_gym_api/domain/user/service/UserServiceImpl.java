@@ -25,6 +25,6 @@ public class UserServiceImpl implements UserService {
 		User user = userRepository.findByPersonId(id)
 				.orElseThrow(() -> new EntityNotFoundException("User not found with ID: " + id));
 
-		user.setPassword(passwordEncoder.encode(dto.getPassword()));
+		user.setPassword(passwordEncoder.encode(dto.getNewPassword()));
 	}
 }
