@@ -22,9 +22,6 @@ import pe.edu.utp.animal_gym_api.domain.person.Person;
 @OnDelete(action = OnDeleteAction.CASCADE)
 public class Employee extends Person {
 
-	@Column(name = "image", nullable = false)
-	private String image;
-
 	@Column(name = "salary", nullable = false)
 	private Double salary;
 

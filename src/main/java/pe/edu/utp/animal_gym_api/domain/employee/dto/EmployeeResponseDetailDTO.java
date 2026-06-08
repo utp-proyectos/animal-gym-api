@@ -21,7 +21,7 @@ public class EmployeeResponseDetailDTO {
 	private String email;
 	private LocalDate birthDate;
 	private LocalDate hireDate;
-	private String image;
+	private String avatar;
 	private double salary;
 	private String contractType;
 	private String specialty;

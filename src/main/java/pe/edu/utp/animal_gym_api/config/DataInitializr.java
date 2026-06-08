@@ -36,7 +36,7 @@ public class DataInitializr implements CommandLineRunner {
 			admin.setBirthDate(LocalDate.now());
 			admin.setHireDate(LocalDate.now());
 
-			admin.setImage("");
+			admin.setAvatar("");
 			admin.setSalary(0.0);
 			admin.setContractType("Permanent");
 			admin.setSpecialty("N/A");

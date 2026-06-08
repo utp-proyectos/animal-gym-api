@@ -47,9 +47,6 @@ public class Partner extends Person {
 	@Column(name = "height")
 	private Double height;
 
-	@Column(name = "image")
-	private String image;
-
 	@ManyToOne
 	@JoinColumn(name = "membership_id")
 	@OnDelete(action = OnDeleteAction.SET_NULL)
