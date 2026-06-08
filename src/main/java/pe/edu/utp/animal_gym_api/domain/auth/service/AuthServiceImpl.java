@@ -50,7 +50,7 @@ public class AuthServiceImpl implements AuthService {
 				user.getPerson().getLastName(),
 				user.getPerson().getEmail(),
 				"",
-				user.getRole());
+				user.getPerson().getRole());
 		System.out.println("------------------------------ ");
 		System.out.println("respuesta: " + r);
 		System.out.println("respuesta: " + r.getDni());

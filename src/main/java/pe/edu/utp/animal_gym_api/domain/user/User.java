@@ -5,8 +5,6 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -16,7 +14,6 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import pe.edu.utp.animal_gym_api.common.enums.Role;
 import pe.edu.utp.animal_gym_api.domain.person.Person;
 
 @Entity
@@ -34,10 +31,6 @@ public class User {
 
 	@Column(name = "password", nullable = false)
 	private String password;
-
-	@Enumerated(EnumType.STRING)
-	@Column(name = "rol", nullable = false)
-	private Role role;
 
 	@OneToOne
 	@JoinColumn(name = "person_id")

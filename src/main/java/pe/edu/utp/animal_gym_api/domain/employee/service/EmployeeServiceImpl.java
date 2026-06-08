@@ -1,6 +1,7 @@
 package pe.edu.utp.animal_gym_api.domain.employee.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -34,7 +35,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public List<EmployeeResponseDTO> findAll() {
-		return employeeRepository.findAllCardEmployees();
+		return employeeRepository.findAll().stream().map(
+				employeeMapper::toResponseDto).collect(Collectors.toList());
 	}
 
 	@Override
@@ -42,10 +44,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 		Employee employee = employeeRepository.findById(id)
 				.orElseThrow(() -> new EntityNotFoundException("Employee not found with ID: " + id));
 
-		User user = userRepository.findByPersonId(id)
-				.orElseThrow(() -> new EntityNotFoundException("User not found with ID: " + id));
-
-		return employeeMapper.toDetailDto(employee, user.getRole());
+		return employeeMapper.toDetailDto(employee);
 	}
 
 	@Override
@@ -56,11 +55,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 		User user = new User();
 		user.setPassword(passwordEncoder.encode(dto.getPassword()));
-		user.setRole(dto.getRole());
 		user.setPerson(employee);
 		userRepository.save(user);
 
-		return employeeMapper.toResponseDto(employee, user.getRole());
+		return employeeMapper.toResponseDto(employee);
 	}
 
 	@Override
@@ -75,13 +73,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 		Employee employee = employeeMapper.toEntity(dto);
 		employee.setId(id);
 		employeeRepository.save(employee);
-
-		User user = userRepository.findByPersonId(id)
-				.orElseThrow(() -> new EntityNotFoundException("User not found with ID: " + id));
-		user.setRole(dto.getRole());
-		userRepository.save(user);
-
-		return employeeMapper.toResponseDto(employee, user.getRole());
+		return employeeMapper.toResponseDto(employee);
 
 	}
 

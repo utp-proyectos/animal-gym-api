@@ -7,6 +7,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -16,6 +18,7 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import pe.edu.utp.animal_gym_api.common.enums.Role;
 import pe.edu.utp.animal_gym_api.domain.employee.Employee;
 import pe.edu.utp.animal_gym_api.domain.partner.Partner;
 
@@ -62,6 +65,9 @@ public abstract class Person {
 	protected LocalDate hireDate;
 
 	@Column(name = "avatar", nullable = false)
-	private String avatar;
+	protected String avatar;
 
+	@Enumerated(EnumType.STRING)
+	@Column(name = "rol", nullable = false)
+	private Role role;
 }
