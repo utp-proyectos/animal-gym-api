@@ -37,6 +37,7 @@ public class DataInitializr implements CommandLineRunner {
 			admin.setHireDate(LocalDate.now());
 
 			admin.setAvatar("");
+			admin.setRole(Role.ADMIN);
 			admin.setSalary(0.0);
 			admin.setContractType("Permanent");
 			admin.setSpecialty("N/A");
@@ -45,9 +46,7 @@ public class DataInitializr implements CommandLineRunner {
 
 			User user = new User();
 			user.setPassword(passwordEncoder.encode("root"));
-			user.setRole(Role.ADMIN);
 			user.setPerson(admin);
-
 			userRepository.save(user);
 		}
 	}

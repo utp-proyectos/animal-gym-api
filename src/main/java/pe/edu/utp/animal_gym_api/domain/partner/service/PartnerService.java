@@ -8,23 +8,23 @@ import pe.edu.utp.animal_gym_api.domain.partner.dto.PartnerRequestDTO;
 import pe.edu.utp.animal_gym_api.domain.partner.dto.PartnerResponseDTO;
 
 public interface PartnerService {
-    List<PartnerResponseDTO> findAll();
+	List<PartnerResponseDTO> findAll();
 
-    PartnerResponseDTO findById(Long id);
+	PartnerResponseDTO findById(Long id);
 
-    PartnerDetailDTO findDetailById(Long id);
+	PartnerDetailDTO findDetailById(Long id);
 
-    PartnerResponseDTO create(PartnerRequestDTO requestDTO);
+	PartnerResponseDTO create(PartnerRequestDTO requestDTO);
 
-    PartnerResponseDTO update(Long id, PartnerRequestDTO requestDTO);
+	PartnerResponseDTO update(Long id, PartnerRequestDTO requestDTO);
 
-    void delete(Long id);
+	void delete(Long id);
 
-    List<PartnerResponseDTO> findByStatus(Boolean status);
+	List<PartnerResponseDTO> findByStatus(Boolean status);
 
-    List<PartnerResponseDTO> findByExpirationDateBetween(LocalDate start, LocalDate end);
+	List<PartnerResponseDTO> findByExpirationDateBetween(LocalDate start, LocalDate end);
 
-    List<PartnerResponseDTO> findByMembershipId(Long membershipId);
+	List<PartnerResponseDTO> findByMembershipId(Long membershipId);
 
-    List<PartnerResponseDTO> findByName(String name);
+	List<PartnerResponseDTO> findByName(String name);
 }
