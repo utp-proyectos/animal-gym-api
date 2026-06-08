@@ -60,4 +60,8 @@ public abstract class Person {
 
 	@Column(name = "hire_date", nullable = false)
 	protected LocalDate hireDate;
+
+	@Column(name = "avatar", nullable = false)
+	private String avatar;
+
 }

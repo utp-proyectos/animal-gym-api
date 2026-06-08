@@ -26,7 +26,7 @@ public interface EmployeeMapper {
 	@Mapping(target = "email", source = "employee.email")
 	@Mapping(target = "birthDate", source = "employee.birthDate")
 	@Mapping(target = "hireDate", source = "employee.hireDate")
-	@Mapping(target = "image", source = "employee.image")
+	@Mapping(target = "avatar", source = "employee.avatar")
 	@Mapping(target = "salary", source = "employee.salary")
 	@Mapping(target = "contractType", source = "employee.contractType")
 	@Mapping(target = "specialty", source = "employee.specialty")

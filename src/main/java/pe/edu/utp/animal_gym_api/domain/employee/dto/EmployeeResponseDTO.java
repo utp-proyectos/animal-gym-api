@@ -13,6 +13,6 @@ public class EmployeeResponseDTO {
 	private Long id;
 	private String firstName;
 	private String lastName;
-	private String image;
+	private String avatar;
 	private Role role;
 }

@@ -21,11 +21,12 @@ public class EmployeeUser {
 	private String email;
 	private LocalDate birthDate;
 	private LocalDate hireDate;
-	private String image;
+	private String avatar;
 	private double salary;
 	private String contractType;
 	private String specialty;
+	private Role role;
 	// datos de User
 	private String password;
-	private Role role;
+
 }
