@@ -15,4 +15,5 @@ public class EmployeeResponseDTO {
 	private String lastName;
 	private String avatar;
 	private Role role;
+	private String dni;
 }
