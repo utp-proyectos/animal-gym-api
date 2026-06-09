@@ -1,5 +1,6 @@
 package pe.edu.utp.animal_gym_api.domain.employee.service;
 
+import java.io.IOException;
 import java.util.List;
 
 import pe.edu.utp.animal_gym_api.domain.employee.dto.EmployeeResponseDTO;
@@ -11,7 +12,7 @@ public interface EmployeeService {
 
 	EmployeeResponseDetailDTO findById(Long id);
 
-	EmployeeResponseDTO save(EmployeeUser dto);
+	EmployeeResponseDTO save(EmployeeUser dto) throws IOException;
 
 	void delete(Long id);
 

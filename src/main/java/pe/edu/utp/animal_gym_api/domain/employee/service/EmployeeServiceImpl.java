@@ -1,5 +1,6 @@
 package pe.edu.utp.animal_gym_api.domain.employee.service;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,6 +16,7 @@ import pe.edu.utp.animal_gym_api.domain.employee.EmployeeRepository;
 import pe.edu.utp.animal_gym_api.domain.employee.dto.EmployeeResponseDTO;
 import pe.edu.utp.animal_gym_api.domain.employee.dto.EmployeeResponseDetailDTO;
 import pe.edu.utp.animal_gym_api.domain.employee.dto.EmployeeUser;
+import pe.edu.utp.animal_gym_api.domain.storage.StorageService;
 import pe.edu.utp.animal_gym_api.domain.user.User;
 import pe.edu.utp.animal_gym_api.domain.user.UserRepository;
 
@@ -33,6 +35,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Autowired
 	private EmployeeMapper employeeMapper;
 
+	@Autowired
+	private StorageService storageService;
+
 	@Override
 	public List<EmployeeResponseDTO> findAll() {
 		return employeeRepository.findAll().stream().map(
@@ -49,8 +54,16 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	@Transactional
-	public EmployeeResponseDTO save(EmployeeUser dto) {
+	public EmployeeResponseDTO save(EmployeeUser dto) throws IOException {
+		String avatar = "";
+		if (dto.getAvatar() != null && !dto.getAvatar().isEmpty()) {
+			avatar = storageService.upload(dto.getAvatar(), "employees");
+		} else {
+			avatar = "../../resource/img/default.png";
+		}
+
 		Employee employee = employeeMapper.toEntity(dto);
+		employee.setAvatar(avatar);
 		employeeRepository.save(employee);
 
 		User user = new User();
