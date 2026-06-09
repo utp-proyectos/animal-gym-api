@@ -10,6 +10,7 @@ import pe.edu.utp.animal_gym_api.domain.employee.dto.EmployeeUser;
 @Mapper(componentModel = "spring")
 public interface EmployeeMapper {
 	@Mapping(target = "id", ignore = true)
+	@Mapping(target = "avatar", ignore = true)
 	Employee toEntity(EmployeeUser dto);
 
 	@Mapping(target = "role", source = "role")

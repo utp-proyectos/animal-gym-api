@@ -42,7 +42,7 @@ public class SecurityConfig {
 						.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authorizeHttpRequests(auth -> auth
 						.requestMatchers("/api/auth/me").authenticated()
-						.requestMatchers("/api/auth/**").permitAll()
+						.requestMatchers("/api/auth/**").permitAll().requestMatchers("/storage/**").permitAll()
 						.anyRequest().authenticated())
 
 				.exceptionHandling(ex -> ex

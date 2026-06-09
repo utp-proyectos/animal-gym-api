@@ -2,6 +2,8 @@ package pe.edu.utp.animal_gym_api.domain.employee.dto;
 
 import java.time.LocalDate;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,7 +23,7 @@ public class EmployeeUser {
 	private String email;
 	private LocalDate birthDate;
 	private LocalDate hireDate;
-	private String avatar;
+	private MultipartFile avatar;
 	private double salary;
 	private String contractType;
 	private String specialty;
