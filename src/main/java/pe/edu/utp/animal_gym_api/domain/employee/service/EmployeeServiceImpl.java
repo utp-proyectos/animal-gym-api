@@ -81,13 +81,23 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	@Transactional
+	public EmployeeResponseDTO update(Long id, EmployeeUser dto) throws IOException {
+		Employee existing = employeeRepository.findById(id)
+				.orElseThrow(() -> new RuntimeException("Empleado no encontrado"));
 
-	public EmployeeResponseDTO update(Long id, EmployeeUser dto) {
+		String avatar;
+		if (dto.getAvatar() != null && !dto.getAvatar().isEmpty()) {
+			avatar = storageService.upload(dto.getAvatar(), "employees");
+		} else {
+			avatar = existing.getAvatar(); // mantiene el anterior
+		}
+
 		Employee employee = employeeMapper.toEntity(dto);
 		employee.setId(id);
+		employee.setAvatar(avatar);
 		employeeRepository.save(employee);
-		return employeeMapper.toResponseDto(employee);
 
+		return employeeMapper.toResponseDto(employee);
 	}
 
 }
