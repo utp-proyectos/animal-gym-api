@@ -16,5 +16,5 @@ public interface EmployeeService {
 
 	void delete(Long id);
 
-	EmployeeResponseDTO update(Long id, EmployeeUser dto);
+	EmployeeResponseDTO update(Long id, EmployeeUser dto) throws IOException;
 }

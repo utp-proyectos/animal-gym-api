@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -53,7 +52,7 @@ public class EmployeeController {
 	@PutMapping("/{id}")
 	public ResponseEntity<ApiResponse<EmployeeResponseDTO>> update(
 			@PathVariable Long id,
-			@RequestBody EmployeeUser dto) {
+			@ModelAttribute EmployeeUser dto) throws IOException {
 		EmployeeResponseDTO updated = employeeService.update(id, dto);
 		return ResponseEntity.ok(ApiResponse.ok("Employee updated successfully", updated));
 	}
