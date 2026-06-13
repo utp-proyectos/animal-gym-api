@@ -1,5 +1,8 @@
 package pe.edu.utp.animal_gym_api.domain.session.service;
 
+import java.io.IOException;
+import java.time.Duration;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,8 +19,10 @@ import pe.edu.utp.animal_gym_api.domain.session.SessionMapper;
 import pe.edu.utp.animal_gym_api.domain.session.SessionRepository;
 import pe.edu.utp.animal_gym_api.domain.session.dto.SessionCardDTO;
 import pe.edu.utp.animal_gym_api.domain.session.dto.SessionDetailDTO;
+import pe.edu.utp.animal_gym_api.domain.session.dto.SessionRequestDTO;
 import pe.edu.utp.animal_gym_api.domain.sessionBooking.SessionBooking;
 import pe.edu.utp.animal_gym_api.domain.sessionBooking.SessionBookingRepository;
+import pe.edu.utp.animal_gym_api.domain.storage.StorageService;
 
 @Service
 public class SessionServiceImpl implements SessionService {
@@ -33,6 +38,9 @@ public class SessionServiceImpl implements SessionService {
 
 	@Autowired
 	EmployeeRepository employeeRepository;
+
+	@Autowired
+	StorageService storageService;
 
 	@Override
 	public List<SessionCardDTO> findAll(Long currentPartnerId) {
@@ -57,25 +65,59 @@ public class SessionServiceImpl implements SessionService {
 	}
 
 	@Override
-	public SessionDetailDTO save(Session session) {
+	public SessionDetailDTO save(SessionRequestDTO dto) throws IOException {
+		Session session = sessionMapper.toEntity(dto);
+
 		if (session.getEmployee() != null && session.getEmployee().getId() != null) {
 			Employee employee = employeeRepository.findById(session.getEmployee().getId())
 					.orElseThrow(() -> new EntityNotFoundException("Employee not found"));
 			session.setEmployee(employee);
 		}
 
-		// Si es una actualización, rescatar datos que no vienen en el objeto
-		if (session.getId() != null) {
-			Session existingSession = sessionRepository.findById(session.getId())
-					.orElseThrow(() -> new EntityNotFoundException("Session not found"));
+		session.setDuration(calculateDuration(dto));
+		session.setStatus(determineStatus(dto.getDate()));
 
-			if (session.getBookings() == null || session.getBookings().isEmpty()) {
-				session.setBookings(existingSession.getBookings());
-			}
+		if (dto.getImage() != null && !dto.getImage().isEmpty()) {
+			String imagePath = storageService.upload(dto.getImage(), "sessions");
+			session.setImage(imagePath);
+		} else {
+			session.setImage("../../resource/img/default.png");
 		}
 
 		Session savedSession = sessionRepository.save(session);
 		return sessionMapper.toDetailDTO(savedSession);
+	}
+
+	@Override
+	public SessionDetailDTO update(Long id, SessionRequestDTO dto) throws IOException {
+		Session existingSession = sessionRepository.findById(id)
+				.orElseThrow(() -> new EntityNotFoundException("Session not found"));
+
+		Session sessionUpdates = sessionMapper.toEntity(dto);
+		sessionUpdates.setId(id);
+
+		if (sessionUpdates.getEmployee() != null && sessionUpdates.getEmployee().getId() != null) {
+			Employee employee = employeeRepository.findById(sessionUpdates.getEmployee().getId())
+					.orElseThrow(() -> new EntityNotFoundException("Employee not found"));
+			sessionUpdates.setEmployee(employee);
+		} else {
+			sessionUpdates.setEmployee(null);
+		}
+
+		sessionUpdates.setDuration(calculateDuration(dto));
+		sessionUpdates.setStatus(determineStatus(dto.getDate()));
+
+		if (dto.getImage() != null && !dto.getImage().isEmpty()) {
+			String imagePath = storageService.upload(dto.getImage(), "sessions");
+			sessionUpdates.setImage(imagePath);
+		} else {
+			sessionUpdates.setImage(existingSession.getImage());
+		}
+
+		sessionUpdates.setBookings(existingSession.getBookings());
+
+		Session updatedSession = sessionRepository.save(sessionUpdates);
+		return sessionMapper.toDetailDTO(updatedSession);
 	}
 
 	@Override
@@ -136,5 +178,30 @@ public class SessionServiceImpl implements SessionService {
 			return false;
 		return session.getBookings().stream()
 				.anyMatch(b -> b.getPartner() != null && b.getPartner().getId().equals(partnerId));
+	}
+
+	private int calculateDuration(SessionRequestDTO dto) {
+		if (dto.getStartTime() == null || dto.getEndTime() == null) {
+			return 60;
+		}
+
+		long minutes = Duration.between(dto.getStartTime(), dto.getEndTime()).toMinutes();
+		return minutes > 0 ? (int) minutes : 60;
+	}
+
+	private String determineStatus(LocalDate sessionDate) {
+		if (sessionDate == null) {
+			return "PROGRAMADO";
+		}
+
+		LocalDate today = LocalDate.now();
+
+		if (sessionDate.isBefore(today)) {
+			return "FINALIZADO";
+		} else if (sessionDate.isEqual(today)) {
+			return "ACTIVO";
+		} else {
+			return "PROGRAMADO";
+		}
 	}
 }
