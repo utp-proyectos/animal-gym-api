@@ -14,7 +14,7 @@ import pe.edu.utp.animal_gym_api.domain.exercises.service.ExerciseService;
 @RequestMapping("/api/exercises")
 public class ExerciseController {
 
-	@Autowired	
+	@Autowired
 	private ExerciseService exerciseService;
 
 	@GetMapping
@@ -28,14 +28,14 @@ public class ExerciseController {
 	}
 
 	@PostMapping
-	public ResponseEntity<ApiResponse<Exercise>> create(@RequestBody Exercise exercise) {
+	public ResponseEntity<ApiResponse<Exercise>> create(@ModelAttribute Exercise exercise) {
 		return ResponseEntity.status(HttpStatus.CREATED)
 				.body(ApiResponse.ok("Exercise created successfully", exerciseService.create(exercise)));
 	}
 
 	@PutMapping("/{id}")
 	public ResponseEntity<ApiResponse<Exercise>> update(@PathVariable Long id,
-			@RequestBody Exercise exercise) {
+			@ModelAttribute Exercise exercise) {
 		return ResponseEntity.ok(ApiResponse.ok("Exercise updated successfully",
 				exerciseService.update(id, exercise)));
 	}

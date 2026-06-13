@@ -10,8 +10,15 @@ import lombok.NoArgsConstructor;
 public class SessionCardDTO {
 	private Long id;
 	private String name;
+	private String description;
+	private String goal;
+	private Integer capacity;
+	private String intensity;
+	private Long employeeId;
+	private String date;
+	private String startTime;
+	private String endTime;
 	private String image;
 	private String status;
-	private Integer capacity;
 	private Boolean enrolled;
 }

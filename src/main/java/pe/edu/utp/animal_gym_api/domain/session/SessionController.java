@@ -1,5 +1,6 @@
 package pe.edu.utp.animal_gym_api.domain.session;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import pe.edu.utp.animal_gym_api.common.response.ApiResponse;
 import pe.edu.utp.animal_gym_api.domain.session.dto.SessionCardDTO;
 import pe.edu.utp.animal_gym_api.domain.session.dto.SessionDetailDTO;
+import pe.edu.utp.animal_gym_api.domain.session.dto.SessionRequestDTO;
 import pe.edu.utp.animal_gym_api.domain.session.service.SessionService;
 import pe.edu.utp.animal_gym_api.domain.sessionBooking.SessionBooking;
 
@@ -44,8 +47,8 @@ public class SessionController {
 	}
 
 	@PostMapping
-	public ResponseEntity<ApiResponse<SessionDetailDTO>> save(@RequestBody Session session) {
-		SessionDetailDTO savedSession = sessionService.save(session);
+	public ResponseEntity<ApiResponse<SessionDetailDTO>> save(@ModelAttribute SessionRequestDTO dto) throws IOException {
+		SessionDetailDTO savedSession = sessionService.save(dto);
 		return ResponseEntity.status(HttpStatus.CREATED)
 				.body(ApiResponse.ok("Session created successfully", savedSession));
 	}
@@ -53,10 +56,8 @@ public class SessionController {
 	@PutMapping("/{id}")
 	public ResponseEntity<ApiResponse<SessionDetailDTO>> update(
 			@PathVariable Long id,
-			@RequestBody Session session) {
-		session.setId(id);
-		SessionDetailDTO updatedSession = sessionService.save(session);
-		return ResponseEntity.ok(ApiResponse.ok("Session updated successfully", updatedSession));
+			@ModelAttribute SessionRequestDTO dto) throws IOException {
+		return ResponseEntity.ok(ApiResponse.ok("Session updated successfully", sessionService.update(id, dto)));
 	}
 
 	@DeleteMapping("/{id}")
