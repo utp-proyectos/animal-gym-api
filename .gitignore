@@ -31,3 +31,6 @@ build/
 
 ### ENVe ###
 .env
+
+### Custom Storage ###
+storage/
