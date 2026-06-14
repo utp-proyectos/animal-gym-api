@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import pe.edu.utp.animal_gym_api.common.response.ApiResponse;
 import pe.edu.utp.animal_gym_api.domain.session.dto.SessionCardDTO;
-import pe.edu.utp.animal_gym_api.domain.session.dto.SessionDetailDTO;
 import pe.edu.utp.animal_gym_api.domain.session.dto.SessionRequestDTO;
 import pe.edu.utp.animal_gym_api.domain.session.service.SessionService;
 import pe.edu.utp.animal_gym_api.domain.sessionBooking.SessionBooking;
@@ -39,22 +38,22 @@ public class SessionController {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<ApiResponse<SessionDetailDTO>> findById(
+	public ResponseEntity<ApiResponse<SessionCardDTO>> findById(
 			@PathVariable Long id,
 			@RequestParam(required = false) Long partnerId) {
-		SessionDetailDTO session = sessionService.findById(id, partnerId);
+		SessionCardDTO session = sessionService.findById(id, partnerId);
 		return ResponseEntity.ok(ApiResponse.ok("Session found", session));
 	}
 
 	@PostMapping
-	public ResponseEntity<ApiResponse<SessionDetailDTO>> save(@ModelAttribute SessionRequestDTO dto) throws IOException {
-		SessionDetailDTO savedSession = sessionService.save(dto);
+	public ResponseEntity<ApiResponse<SessionCardDTO>> save(@ModelAttribute SessionRequestDTO dto) throws IOException {
+		SessionCardDTO savedSession = sessionService.save(dto);
 		return ResponseEntity.status(HttpStatus.CREATED)
 				.body(ApiResponse.ok("Session created successfully", savedSession));
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<ApiResponse<SessionDetailDTO>> update(
+	public ResponseEntity<ApiResponse<SessionCardDTO>> update(
 			@PathVariable Long id,
 			@ModelAttribute SessionRequestDTO dto) throws IOException {
 		return ResponseEntity.ok(ApiResponse.ok("Session updated successfully", sessionService.update(id, dto)));
@@ -69,18 +68,18 @@ public class SessionController {
 	/* Bookings (Reservas) */
 
 	@PostMapping("/{sessionId}/bookings")
-	public ResponseEntity<ApiResponse<SessionDetailDTO>> addBooking(
+	public ResponseEntity<ApiResponse<SessionCardDTO>> addBooking(
 			@PathVariable Long sessionId,
 			@RequestBody SessionBooking booking) {
-		SessionDetailDTO updatedSession = sessionService.addBooking(sessionId, booking);
+		SessionCardDTO updatedSession = sessionService.addBooking(sessionId, booking);
 		return ResponseEntity.ok(ApiResponse.ok("Booking added successfully", updatedSession));
 	}
 
 	@DeleteMapping("/{sessionId}/bookings/{bookingId}")
-	public ResponseEntity<ApiResponse<SessionDetailDTO>> removeBooking(
+	public ResponseEntity<ApiResponse<SessionCardDTO>> removeBooking(
 			@PathVariable Long sessionId,
 			@PathVariable Long bookingId) {
-		SessionDetailDTO updatedSession = sessionService.removeBooking(sessionId, bookingId);
+		SessionCardDTO updatedSession = sessionService.removeBooking(sessionId, bookingId);
 		return ResponseEntity.ok(ApiResponse.ok("Booking removed successfully", updatedSession));
 	}
 }

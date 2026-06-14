@@ -18,7 +18,7 @@ import pe.edu.utp.animal_gym_api.domain.session.Session;
 import pe.edu.utp.animal_gym_api.domain.session.SessionMapper;
 import pe.edu.utp.animal_gym_api.domain.session.SessionRepository;
 import pe.edu.utp.animal_gym_api.domain.session.dto.SessionCardDTO;
-import pe.edu.utp.animal_gym_api.domain.session.dto.SessionDetailDTO;
+import pe.edu.utp.animal_gym_api.domain.session.dto.SessionCardDTO;
 import pe.edu.utp.animal_gym_api.domain.session.dto.SessionRequestDTO;
 import pe.edu.utp.animal_gym_api.domain.sessionBooking.SessionBooking;
 import pe.edu.utp.animal_gym_api.domain.sessionBooking.SessionBookingRepository;
@@ -54,10 +54,10 @@ public class SessionServiceImpl implements SessionService {
 	}
 
 	@Override
-	public SessionDetailDTO findById(Long id, Long currentPartnerId) {
+	public SessionCardDTO findById(Long id, Long currentPartnerId) {
 		return sessionRepository.findById(id)
 				.map(session -> {
-					SessionDetailDTO dto = sessionMapper.toDetailDTO(session);
+					SessionCardDTO dto = sessionMapper.toCardDTO(session);
 					dto.setEnrolled(isPartnerEnrolled(session, currentPartnerId));
 					return dto;
 				})
@@ -65,7 +65,7 @@ public class SessionServiceImpl implements SessionService {
 	}
 
 	@Override
-	public SessionDetailDTO save(SessionRequestDTO dto) throws IOException {
+	public SessionCardDTO save(SessionRequestDTO dto) throws IOException {
 		Session session = sessionMapper.toEntity(dto);
 
 		if (session.getEmployee() != null && session.getEmployee().getId() != null) {
@@ -85,11 +85,11 @@ public class SessionServiceImpl implements SessionService {
 		}
 
 		Session savedSession = sessionRepository.save(session);
-		return sessionMapper.toDetailDTO(savedSession);
+		return sessionMapper.toCardDTO(savedSession);
 	}
 
 	@Override
-	public SessionDetailDTO update(Long id, SessionRequestDTO dto) throws IOException {
+	public SessionCardDTO update(Long id, SessionRequestDTO dto) throws IOException {
 		Session existingSession = sessionRepository.findById(id)
 				.orElseThrow(() -> new EntityNotFoundException("Session not found"));
 
@@ -117,7 +117,7 @@ public class SessionServiceImpl implements SessionService {
 		sessionUpdates.setBookings(existingSession.getBookings());
 
 		Session updatedSession = sessionRepository.save(sessionUpdates);
-		return sessionMapper.toDetailDTO(updatedSession);
+		return sessionMapper.toCardDTO(updatedSession);
 	}
 
 	@Override
@@ -130,7 +130,7 @@ public class SessionServiceImpl implements SessionService {
 
 	@Override
 	@Transactional
-	public SessionDetailDTO addBooking(Long sessionId, SessionBooking booking) {
+	public SessionCardDTO addBooking(Long sessionId, SessionBooking booking) {
 		Session session = sessionRepository.findById(sessionId)
 				.orElseThrow(() -> new EntityNotFoundException("Session not found with ID: " + sessionId));
 
@@ -149,14 +149,14 @@ public class SessionServiceImpl implements SessionService {
 		session.getBookings().add(newBooking);
 		Session updatedSession = sessionRepository.save(session);
 
-		SessionDetailDTO dto = sessionMapper.toDetailDTO(updatedSession);
+		SessionCardDTO dto = sessionMapper.toCardDTO(updatedSession);
 		dto.setEnrolled(true);
 		return dto;
 	}
 
 	@Override
 	@Transactional
-	public SessionDetailDTO removeBooking(Long sessionId, Long bookingId) {
+	public SessionCardDTO removeBooking(Long sessionId, Long bookingId) {
 		Session session = sessionRepository.findById(sessionId)
 				.orElseThrow(() -> new EntityNotFoundException("Session not found"));
 
@@ -168,7 +168,7 @@ public class SessionServiceImpl implements SessionService {
 		}
 
 		Session updatedSession = sessionRepository.save(session);
-		SessionDetailDTO dto = sessionMapper.toDetailDTO(updatedSession);
+		SessionCardDTO dto = sessionMapper.toCardDTO(updatedSession);
 		dto.setEnrolled(false);
 		return dto;
 	}

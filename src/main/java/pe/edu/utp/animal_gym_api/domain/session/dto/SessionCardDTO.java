@@ -3,6 +3,7 @@ package pe.edu.utp.animal_gym_api.domain.session.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import pe.edu.utp.animal_gym_api.domain.employee.dto.EmployeeResponseDTO;
 
 @Data
 @NoArgsConstructor
@@ -14,7 +15,7 @@ public class SessionCardDTO {
 	private String goal;
 	private Integer capacity;
 	private String intensity;
-	private Long employeeId;
+	private EmployeeResponseDTO employee;
 	private String date;
 	private String startTime;
 	private String endTime;
