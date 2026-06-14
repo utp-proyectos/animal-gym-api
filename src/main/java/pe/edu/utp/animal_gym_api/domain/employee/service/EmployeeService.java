@@ -8,13 +8,13 @@ import pe.edu.utp.animal_gym_api.domain.employee.dto.EmployeeResponseDetailDTO;
 import pe.edu.utp.animal_gym_api.domain.employee.dto.EmployeeUser;
 
 public interface EmployeeService {
-	List<EmployeeResponseDTO> findAll();
+	List<EmployeeResponseDetailDTO> findAll();
 
 	EmployeeResponseDetailDTO findById(Long id);
 
-	EmployeeResponseDTO save(EmployeeUser dto) throws IOException;
+	EmployeeResponseDetailDTO save(EmployeeUser dto) throws IOException;
 
 	void delete(Long id);
 
-	EmployeeResponseDTO update(Long id, EmployeeUser dto) throws IOException;
+	EmployeeResponseDetailDTO update(Long id, EmployeeUser dto) throws IOException;
 }
