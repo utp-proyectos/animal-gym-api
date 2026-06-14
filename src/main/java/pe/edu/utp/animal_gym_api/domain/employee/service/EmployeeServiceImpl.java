@@ -39,9 +39,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 	private StorageService storageService;
 
 	@Override
-	public List<EmployeeResponseDTO> findAll() {
+	public List<EmployeeResponseDetailDTO> findAll() {
 		return employeeRepository.findAll().stream().map(
-				employeeMapper::toResponseDto).collect(Collectors.toList());
+				employeeMapper::toDetailDto).collect(Collectors.toList());
 	}
 
 	@Override
@@ -54,7 +54,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	@Transactional
-	public EmployeeResponseDTO save(EmployeeUser dto) throws IOException {
+	public EmployeeResponseDetailDTO save(EmployeeUser dto) throws IOException {
 		String avatar = "";
 		if (dto.getAvatar() != null && !dto.getAvatar().isEmpty()) {
 			avatar = storageService.upload(dto.getAvatar(), "employees");
@@ -71,7 +71,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 		user.setPerson(employee);
 		userRepository.save(user);
 
-		return employeeMapper.toResponseDto(employee);
+		return employeeMapper.toDetailDto(employee);
 	}
 
 	@Override
@@ -81,23 +81,22 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	@Transactional
-	public EmployeeResponseDTO update(Long id, EmployeeUser dto) throws IOException {
+	public EmployeeResponseDetailDTO update(Long id, EmployeeUser dto) throws IOException {
 		Employee existing = employeeRepository.findById(id)
 				.orElseThrow(() -> new RuntimeException("Empleado no encontrado"));
 
-		String avatar;
-		if (dto.getAvatar() != null && !dto.getAvatar().isEmpty()) {
-			avatar = storageService.upload(dto.getAvatar(), "employees");
-		} else {
-			avatar = existing.getAvatar(); // mantiene el anterior
-		}
-
 		Employee employee = employeeMapper.toEntity(dto);
 		employee.setId(id);
-		employee.setAvatar(avatar);
-		employeeRepository.save(employee);
 
-		return employeeMapper.toResponseDto(employee);
+		if (dto.getAvatar() != null && !dto.getAvatar().isEmpty()) {
+			String avatar = storageService.upload(dto.getAvatar(), "employees");
+			employee.setAvatar(avatar);
+		} else {
+			employee.setAvatar(existing.getAvatar());
+		}
+
+		employeeRepository.save(employee);
+		return employeeMapper.toDetailDto(employee);
 	}
 
 }

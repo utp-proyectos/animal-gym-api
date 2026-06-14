@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,8 +30,8 @@ public class EmployeeController {
 	private EmployeeService employeeService;
 
 	@GetMapping
-	public ResponseEntity<ApiResponse<List<EmployeeResponseDTO>>> findAll() {
-		List<EmployeeResponseDTO> employees = employeeService.findAll();
+	public ResponseEntity<ApiResponse<List<EmployeeResponseDetailDTO>>> findAll() {
+		List<EmployeeResponseDetailDTO> employees = employeeService.findAll();
 		return ResponseEntity.ok(ApiResponse.ok("Employees retrieved successfully", employees));
 	}
 
@@ -41,19 +42,19 @@ public class EmployeeController {
 	}
 
 	@PostMapping
-	public ResponseEntity<ApiResponse<EmployeeResponseDTO>> save(
+	public ResponseEntity<ApiResponse<EmployeeResponseDetailDTO>> save(
 			@ModelAttribute EmployeeUser dto) throws IOException {
 
-		EmployeeResponseDTO saved = employeeService.save(dto);
+		EmployeeResponseDetailDTO saved = employeeService.save(dto);
 		return ResponseEntity.status(HttpStatus.CREATED)
 				.body(ApiResponse.ok("Employee created successfully", saved));
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<ApiResponse<EmployeeResponseDTO>> update(
+	public ResponseEntity<ApiResponse<EmployeeResponseDetailDTO>> update(
 			@PathVariable Long id,
-			@ModelAttribute EmployeeUser dto) throws IOException {
-		EmployeeResponseDTO updated = employeeService.update(id, dto);
+			@RequestBody EmployeeUser dto) throws IOException {
+		EmployeeResponseDetailDTO updated = employeeService.update(id, dto);
 		return ResponseEntity.ok(ApiResponse.ok("Employee updated successfully", updated));
 	}
 
