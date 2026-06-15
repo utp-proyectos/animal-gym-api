@@ -13,7 +13,6 @@ import jakarta.transaction.Transactional;
 import pe.edu.utp.animal_gym_api.domain.employee.Employee;
 import pe.edu.utp.animal_gym_api.domain.employee.EmployeeMapper;
 import pe.edu.utp.animal_gym_api.domain.employee.EmployeeRepository;
-import pe.edu.utp.animal_gym_api.domain.employee.dto.EmployeeResponseDTO;
 import pe.edu.utp.animal_gym_api.domain.employee.dto.EmployeeResponseDetailDTO;
 import pe.edu.utp.animal_gym_api.domain.employee.dto.EmployeeUser;
 import pe.edu.utp.animal_gym_api.domain.storage.StorageService;

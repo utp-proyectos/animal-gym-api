@@ -43,10 +43,10 @@ public abstract class Person {
 	@Column(name = "dni", unique = true, nullable = false, length = 8)
 	protected String dni;
 
-	@Column(name = "first_name", nullable = false, length = 20)
+	@Column(name = "first_name", nullable = false, length = 100)
 	protected String firstName;
 
-	@Column(name = "last_name", nullable = false, length = 30)
+	@Column(name = "last_name", nullable = false, length = 100)
 	protected String lastName;
 
 	@Column(name = "phone_number", unique = true, nullable = false, length = 9)
