@@ -3,6 +3,8 @@ package pe.edu.utp.animal_gym_api.domain.session.service;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,6 +49,7 @@ public class SessionServiceImpl implements SessionService {
 		return sessionRepository.findAll().stream()
 				.map(session -> {
 					SessionCardDTO dto = sessionMapper.toCardDTO(session);
+					dto.setStatus(determineStatus(session.getDate(), session.getStartTime(), session.getEndTime()));
 					dto.setEnrolled(isPartnerEnrolled(session, currentPartnerId));
 					return dto;
 				})
@@ -58,6 +61,7 @@ public class SessionServiceImpl implements SessionService {
 		return sessionRepository.findById(id)
 				.map(session -> {
 					SessionCardDTO dto = sessionMapper.toCardDTO(session);
+					dto.setStatus(determineStatus(session.getDate(), session.getStartTime(), session.getEndTime()));
 					dto.setEnrolled(isPartnerEnrolled(session, currentPartnerId));
 					return dto;
 				})
@@ -75,7 +79,7 @@ public class SessionServiceImpl implements SessionService {
 		}
 
 		session.setDuration(calculateDuration(dto));
-		session.setStatus(determineStatus(dto.getDate()));
+		session.setStatus("PROGRAMADO");
 
 		if (dto.getImage() != null && !dto.getImage().isEmpty()) {
 			String imagePath = storageService.upload(dto.getImage(), "sessions");
@@ -85,7 +89,12 @@ public class SessionServiceImpl implements SessionService {
 		}
 
 		Session savedSession = sessionRepository.save(session);
-		return sessionMapper.toCardDTO(savedSession);
+
+		SessionCardDTO resultDto = sessionMapper.toCardDTO(savedSession);
+		resultDto
+				.setStatus(determineStatus(savedSession.getDate(), savedSession.getStartTime(), savedSession.getEndTime()));
+
+		return resultDto;
 	}
 
 	@Override
@@ -105,7 +114,7 @@ public class SessionServiceImpl implements SessionService {
 		}
 
 		sessionUpdates.setDuration(calculateDuration(dto));
-		sessionUpdates.setStatus(determineStatus(dto.getDate()));
+		sessionUpdates.setStatus("PROGRAMADO");
 
 		if (dto.getImage() != null && !dto.getImage().isEmpty()) {
 			String imagePath = storageService.upload(dto.getImage(), "sessions");
@@ -115,9 +124,13 @@ public class SessionServiceImpl implements SessionService {
 		}
 
 		sessionUpdates.setBookings(existingSession.getBookings());
-
 		Session updatedSession = sessionRepository.save(sessionUpdates);
-		return sessionMapper.toCardDTO(updatedSession);
+		SessionCardDTO resultDto = sessionMapper.toCardDTO(updatedSession);
+
+		resultDto.setStatus(
+				determineStatus(updatedSession.getDate(), updatedSession.getStartTime(), updatedSession.getEndTime()));
+
+		return resultDto;
 	}
 
 	@Override
@@ -189,19 +202,21 @@ public class SessionServiceImpl implements SessionService {
 		return minutes > 0 ? (int) minutes : 60;
 	}
 
-	private String determineStatus(LocalDate sessionDate) {
-		if (sessionDate == null) {
+	private String determineStatus(LocalDate date, LocalTime startTime, LocalTime endTime) {
+		if (date == null || startTime == null || endTime == null) {
 			return "PROGRAMADO";
 		}
 
-		LocalDate today = LocalDate.now();
+		LocalDateTime now = LocalDateTime.now();
+		LocalDateTime sessionStart = LocalDateTime.of(date, startTime);
+		LocalDateTime sessionEnd = LocalDateTime.of(date, endTime);
 
-		if (sessionDate.isBefore(today)) {
+		if (now.isAfter(sessionEnd)) {
 			return "FINALIZADO";
-		} else if (sessionDate.isEqual(today)) {
-			return "ACTIVO";
-		} else {
+		} else if (now.isBefore(sessionStart)) {
 			return "PROGRAMADO";
+		} else {
+			return "ACTIVO";
 		}
 	}
 }
