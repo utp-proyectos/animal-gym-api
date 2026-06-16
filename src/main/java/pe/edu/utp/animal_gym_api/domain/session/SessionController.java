@@ -21,7 +21,6 @@ import pe.edu.utp.animal_gym_api.common.response.ApiResponse;
 import pe.edu.utp.animal_gym_api.domain.session.dto.SessionCardDTO;
 import pe.edu.utp.animal_gym_api.domain.session.dto.SessionRequestDTO;
 import pe.edu.utp.animal_gym_api.domain.session.service.SessionService;
-import pe.edu.utp.animal_gym_api.domain.sessionBooking.SessionBooking;
 
 @RestController
 @RequestMapping("/api/sessions")
@@ -66,14 +65,6 @@ public class SessionController {
 	}
 
 	/* Bookings (Reservas) */
-
-	@PostMapping("/{sessionId}/bookings")
-	public ResponseEntity<ApiResponse<SessionCardDTO>> addBooking(
-			@PathVariable Long sessionId,
-			@RequestBody SessionBooking booking) {
-		SessionCardDTO updatedSession = sessionService.addBooking(sessionId, booking);
-		return ResponseEntity.ok(ApiResponse.ok("Booking added successfully", updatedSession));
-	}
 
 	@DeleteMapping("/{sessionId}/bookings/{bookingId}")
 	public ResponseEntity<ApiResponse<SessionCardDTO>> removeBooking(

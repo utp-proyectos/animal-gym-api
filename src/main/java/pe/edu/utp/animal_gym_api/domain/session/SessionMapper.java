@@ -5,9 +5,7 @@ import org.mapstruct.Mapping;
 
 import pe.edu.utp.animal_gym_api.domain.employee.EmployeeMapper;
 import pe.edu.utp.animal_gym_api.domain.session.dto.SessionCardDTO;
-import pe.edu.utp.animal_gym_api.domain.session.dto.SessionParticipantDTO;
 import pe.edu.utp.animal_gym_api.domain.session.dto.SessionRequestDTO;
-import pe.edu.utp.animal_gym_api.domain.sessionBooking.SessionBooking;
 
 @Mapper(componentModel = "spring", uses = { EmployeeMapper.class })
 public interface SessionMapper {
@@ -28,9 +26,4 @@ public interface SessionMapper {
 	@Mapping(target = "endTime", source = "endTime")
 	SessionCardDTO toCardDTO(Session session);
 
-	@Mapping(target = "id", source = "partner.id")
-	@Mapping(target = "dni", source = "partner.dni")
-	@Mapping(target = "firstName", source = "partner.firstName")
-	@Mapping(target = "lastName", source = "partner.lastName")
-	SessionParticipantDTO toParticipantDTO(SessionBooking booking);
 }

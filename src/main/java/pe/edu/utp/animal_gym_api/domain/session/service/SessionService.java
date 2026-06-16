@@ -5,7 +5,6 @@ import java.util.List;
 
 import pe.edu.utp.animal_gym_api.domain.session.dto.SessionCardDTO;
 import pe.edu.utp.animal_gym_api.domain.session.dto.SessionRequestDTO;
-import pe.edu.utp.animal_gym_api.domain.sessionBooking.SessionBooking;
 
 public interface SessionService {
 	List<SessionCardDTO> findAll(Long currentPartnerId);
@@ -17,8 +16,6 @@ public interface SessionService {
 	SessionCardDTO update(Long id, SessionRequestDTO dto) throws IOException;
 
 	void deleteById(Long id);
-
-	SessionCardDTO addBooking(Long sessionId, SessionBooking booking);
 
 	SessionCardDTO removeBooking(Long sessionId, Long bookingId);
 }
