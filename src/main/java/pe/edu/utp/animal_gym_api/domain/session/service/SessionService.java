@@ -16,6 +16,4 @@ public interface SessionService {
 	SessionCardDTO update(Long id, SessionRequestDTO dto) throws IOException;
 
 	void deleteById(Long id);
-
-	SessionCardDTO removeBooking(Long sessionId, Long bookingId);
 }

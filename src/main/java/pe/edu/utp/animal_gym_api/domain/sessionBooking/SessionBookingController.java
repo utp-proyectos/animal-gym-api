@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import pe.edu.utp.animal_gym_api.common.response.ApiResponse;
+import pe.edu.utp.animal_gym_api.domain.session.dto.SessionCardDTO;
 import pe.edu.utp.animal_gym_api.domain.sessionBooking.dto.PartnerEnrolledRequestDTO;
 import pe.edu.utp.animal_gym_api.domain.sessionBooking.dto.PartnerEnrolledResponseDTO;
 import pe.edu.utp.animal_gym_api.domain.sessionBooking.service.SessionBookingService;
@@ -48,6 +49,14 @@ public class SessionBookingController {
 
 		return ResponseEntity.status(HttpStatus.CREATED)
 				.body(ApiResponse.ok("Socio inscrito exitosamente en la sesión."));
+	}
+
+	@DeleteMapping("/session/{sessionId}/booking/{bookingId}")
+	public ResponseEntity<ApiResponse<String>> removeBooking(
+			@PathVariable Long sessionId,
+			@PathVariable Long bookingId) {
+		sessionBookingService.removeBooking(sessionId, bookingId);
+		return ResponseEntity.ok(ApiResponse.ok("Socio dado de baja exitosamente de la sesión."));
 	}
 
 	@PostMapping("/subscribe")

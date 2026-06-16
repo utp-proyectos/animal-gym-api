@@ -13,17 +13,14 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional;
 import pe.edu.utp.animal_gym_api.domain.employee.Employee;
 import pe.edu.utp.animal_gym_api.domain.employee.EmployeeRepository;
-import pe.edu.utp.animal_gym_api.domain.partner.Partner;
 import pe.edu.utp.animal_gym_api.domain.partner.PartnerRepository;
 import pe.edu.utp.animal_gym_api.domain.session.Session;
 import pe.edu.utp.animal_gym_api.domain.session.SessionMapper;
 import pe.edu.utp.animal_gym_api.domain.session.SessionRepository;
 import pe.edu.utp.animal_gym_api.domain.session.dto.SessionCardDTO;
 import pe.edu.utp.animal_gym_api.domain.session.dto.SessionRequestDTO;
-import pe.edu.utp.animal_gym_api.domain.sessionBooking.SessionBooking;
 import pe.edu.utp.animal_gym_api.domain.sessionBooking.SessionBookingRepository;
 import pe.edu.utp.animal_gym_api.domain.storage.StorageService;
 
@@ -55,6 +52,7 @@ public class SessionServiceImpl implements SessionService {
 					SessionCardDTO dto = sessionMapper.toCardDTO(session);
 					dto.setStatus(determineStatus(session.getDate(), session.getStartTime(), session.getEndTime()));
 					dto.setEnrolled(isPartnerEnrolled(session, currentPartnerId));
+					dto.setBookingsCount(session.getBookings().size());
 					return dto;
 				})
 				.collect(Collectors.toList());
@@ -67,6 +65,7 @@ public class SessionServiceImpl implements SessionService {
 					SessionCardDTO dto = sessionMapper.toCardDTO(session);
 					dto.setStatus(determineStatus(session.getDate(), session.getStartTime(), session.getEndTime()));
 					dto.setEnrolled(isPartnerEnrolled(session, currentPartnerId));
+					dto.setBookingsCount(session.getBookings().size());
 					return dto;
 				})
 				.orElseThrow(() -> new EntityNotFoundException("No se encontró la clase con el ID: " + id));
@@ -143,25 +142,6 @@ public class SessionServiceImpl implements SessionService {
 			throw new EntityNotFoundException("No se puede eliminar: No existe la sesión con ID: " + id);
 		}
 		sessionRepository.deleteById(id);
-	}
-
-	@Override
-	@Transactional
-	public SessionCardDTO removeBooking(Long sessionId, Long bookingId) {
-		Session session = sessionRepository.findById(sessionId)
-				.orElseThrow(() -> new EntityNotFoundException("Session not found"));
-
-		// Buscamos la reserva en la lista de la sesión
-		boolean removed = session.getBookings().removeIf(b -> b.getId().equals(bookingId));
-
-		if (!removed) {
-			throw new RuntimeException("Booking not found in this session");
-		}
-
-		Session updatedSession = sessionRepository.save(session);
-		SessionCardDTO dto = sessionMapper.toCardDTO(updatedSession);
-		dto.setEnrolled(false);
-		return dto;
 	}
 
 	private Boolean isPartnerEnrolled(Session session, Long partnerId) {

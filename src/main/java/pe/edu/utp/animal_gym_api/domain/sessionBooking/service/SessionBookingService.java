@@ -12,6 +12,8 @@ public interface SessionBookingService {
 
 	void addBooking(Long sessionId, String dni);
 
+	void removeBooking(Long sessionId, Long bookingId);
+
 	void subscribe(Long partnerId, Long sessionId);
 
 	void cancel(Long partnerId, Long sessionId);
