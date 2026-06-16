@@ -14,6 +14,8 @@ public interface PartnerRepository extends JpaRepository<Partner, Long> {
 
 	List<Partner> findByStatus(Boolean status);
 
+	Optional<Partner> findByDni(String dni);
+
 	List<Partner> findByExpirationDateBetween(LocalDate startDate, LocalDate endDate);
 
 	List<Partner> findByMembershipId(Long membershipId);

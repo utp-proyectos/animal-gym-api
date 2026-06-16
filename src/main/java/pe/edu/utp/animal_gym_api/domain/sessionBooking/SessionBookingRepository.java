@@ -10,8 +10,10 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface SessionBookingRepository extends JpaRepository<SessionBooking, Long> {
 
-	// Busca las reservas de un socio por su ID
 	List<SessionBooking> findByPartner_Id(Long partnerId);
+
+	@Query("SELECT sb FROM SessionBooking sb JOIN FETCH sb.partner WHERE sb.session.id = :sessionId")
+	List<SessionBooking> findBySession_IdWithPartner(@Param("sessionId") Long sessionId);
 
 	// Verifica si ya existe una reserva para ese socio en esa sesión
 	boolean existsByPartner_IdAndSession_Id(Long partnerId, Long sessionId);

@@ -16,10 +16,11 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import pe.edu.utp.animal_gym_api.domain.employee.Employee;
 import pe.edu.utp.animal_gym_api.domain.employee.EmployeeRepository;
+import pe.edu.utp.animal_gym_api.domain.partner.Partner;
+import pe.edu.utp.animal_gym_api.domain.partner.PartnerRepository;
 import pe.edu.utp.animal_gym_api.domain.session.Session;
 import pe.edu.utp.animal_gym_api.domain.session.SessionMapper;
 import pe.edu.utp.animal_gym_api.domain.session.SessionRepository;
-import pe.edu.utp.animal_gym_api.domain.session.dto.SessionCardDTO;
 import pe.edu.utp.animal_gym_api.domain.session.dto.SessionCardDTO;
 import pe.edu.utp.animal_gym_api.domain.session.dto.SessionRequestDTO;
 import pe.edu.utp.animal_gym_api.domain.sessionBooking.SessionBooking;
@@ -40,6 +41,9 @@ public class SessionServiceImpl implements SessionService {
 
 	@Autowired
 	EmployeeRepository employeeRepository;
+
+	@Autowired
+	PartnerRepository partnerRepository;
 
 	@Autowired
 	StorageService storageService;
@@ -139,32 +143,6 @@ public class SessionServiceImpl implements SessionService {
 			throw new EntityNotFoundException("No se puede eliminar: No existe la sesión con ID: " + id);
 		}
 		sessionRepository.deleteById(id);
-	}
-
-	@Override
-	@Transactional
-	public SessionCardDTO addBooking(Long sessionId, SessionBooking booking) {
-		Session session = sessionRepository.findById(sessionId)
-				.orElseThrow(() -> new EntityNotFoundException("Session not found with ID: " + sessionId));
-
-		// Validar capacidad (Lanzamos DataIntegrity para que el Handler devuelva 400)
-		if (session.getBookings().size() >= session.getCapacity()) {
-			throw new DataIntegrityViolationException("La sesión ha alcanzado su capacidad máxima.");
-		}
-
-		// Validar duplicados
-		boolean alreadyEnrolled = isPartnerEnrolled(session, booking.getPartner().getId());
-		if (alreadyEnrolled) {
-			throw new DataIntegrityViolationException("El socio ya se encuentra inscrito en esta sesión.");
-		}
-
-		SessionBooking newBooking = sessionBookingRepository.save(booking);
-		session.getBookings().add(newBooking);
-		Session updatedSession = sessionRepository.save(session);
-
-		SessionCardDTO dto = sessionMapper.toCardDTO(updatedSession);
-		dto.setEnrolled(true);
-		return dto;
 	}
 
 	@Override
