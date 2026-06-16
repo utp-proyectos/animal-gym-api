@@ -13,6 +13,7 @@ import pe.edu.utp.animal_gym_api.domain.partner.Partner;
 import pe.edu.utp.animal_gym_api.domain.partner.PartnerRepository;
 import pe.edu.utp.animal_gym_api.domain.session.Session;
 import pe.edu.utp.animal_gym_api.domain.session.SessionRepository;
+import pe.edu.utp.animal_gym_api.domain.session.dto.SessionCardDTO;
 import pe.edu.utp.animal_gym_api.domain.sessionBooking.dto.PartnerEnrolledResponseDTO;
 import pe.edu.utp.animal_gym_api.domain.sessionBooking.SessionBooking;
 import pe.edu.utp.animal_gym_api.domain.sessionBooking.SessionBookingMapper;
@@ -76,6 +77,23 @@ public class SessionBookingServiceImpl implements SessionBookingService {
 
 		session.getBookings().add(newBooking);
 		sessionBookingRepository.save(newBooking);
+	}
+
+	@Override
+	@Transactional
+	public void removeBooking(Long sessionId, Long bookingId) {
+		if (!sessionRepository.existsById(sessionId)) {
+			throw new EntityNotFoundException("Sesión no encontrada con ID: " + sessionId);
+		}
+
+		SessionBooking booking = sessionBookingRepository.findById(bookingId)
+				.orElseThrow(() -> new EntityNotFoundException("Reserva no encontrada con ID: " + bookingId));
+
+		if (!booking.getSession().getId().equals(sessionId)) {
+			throw new DataIntegrityViolationException("La reserva no corresponde a la sesión especificada.");
+		}
+
+		sessionBookingRepository.delete(booking);
 	}
 
 	private Boolean isPartnerEnrolled(Session session, Long partnerId) {

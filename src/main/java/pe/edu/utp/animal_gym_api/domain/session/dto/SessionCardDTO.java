@@ -22,4 +22,5 @@ public class SessionCardDTO {
 	private String image;
 	private String status;
 	private Boolean enrolled;
+	private Integer bookingsCount;
 }

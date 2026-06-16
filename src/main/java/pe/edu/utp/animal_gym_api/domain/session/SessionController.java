@@ -64,13 +64,4 @@ public class SessionController {
 		return ResponseEntity.ok(ApiResponse.ok("Session deleted successfully", null));
 	}
 
-	/* Bookings (Reservas) */
-
-	@DeleteMapping("/{sessionId}/bookings/{bookingId}")
-	public ResponseEntity<ApiResponse<SessionCardDTO>> removeBooking(
-			@PathVariable Long sessionId,
-			@PathVariable Long bookingId) {
-		SessionCardDTO updatedSession = sessionService.removeBooking(sessionId, bookingId);
-		return ResponseEntity.ok(ApiResponse.ok("Booking removed successfully", updatedSession));
-	}
 }
