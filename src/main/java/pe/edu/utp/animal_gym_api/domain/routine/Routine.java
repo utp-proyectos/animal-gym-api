@@ -27,10 +27,10 @@ public class Routine {
 	@Column(name = "name", length = 100, nullable = false)
 	private String name;
 
-	@Column(name = "description", nullable = false)
+	@Column(name = "description")
 	private String description;
 
-	@Column(name = "goal", nullable = false)
+	@Column(name = "goal")
 	private String goal;
 
 	@Column(name = "start_date", nullable = false)

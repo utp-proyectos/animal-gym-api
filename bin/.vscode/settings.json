@@ -1,0 +1,13 @@
+{
+	"editor.tabSize": 2,
+	"editor.insertSpaces": false,
+	"files.autoSave": "onFocusChange",
+	"editor.formatOnSave": true,
+	"[java]": {
+		"editor.defaultFormatter": "redhat.java",
+		"editor.formatOnSave": true
+	},
+	"java.compile.nullAnalysis.mode": "automatic",
+	"java.configuration.updateBuildConfiguration": "interactive",
+	"java.debug.settings.onBuildFailureProceed": true
+}

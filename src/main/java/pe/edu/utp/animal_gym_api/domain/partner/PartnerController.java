@@ -13,6 +13,7 @@ import pe.edu.utp.animal_gym_api.common.response.ApiResponse;
 import pe.edu.utp.animal_gym_api.domain.partner.dto.PartnerDetailDTO;
 import pe.edu.utp.animal_gym_api.domain.partner.dto.PartnerRequestDTO;
 import pe.edu.utp.animal_gym_api.domain.partner.dto.PartnerResponseDTO;
+import pe.edu.utp.animal_gym_api.domain.partner.dto.PartnerRoutinesResponseDTO;
 import pe.edu.utp.animal_gym_api.domain.partner.service.PartnerService;
 
 @RestController
@@ -80,5 +81,17 @@ public class PartnerController {
 	public ResponseEntity<ApiResponse<List<PartnerResponseDTO>>> findByName(
 			@RequestParam String name) {
 		return ResponseEntity.ok(ApiResponse.ok(partnerService.findByName(name)));
+	}
+
+	@GetMapping("/{id}/routines")
+	public ResponseEntity<ApiResponse<PartnerRoutinesResponseDTO>> getPartnerRoutines(@PathVariable Long id) {
+		PartnerRoutinesResponseDTO data = partnerService.findRoutinesByPartnerId(id);
+		return ResponseEntity.ok(ApiResponse.ok("Partner routines retrieved successfully", data));
+	}
+
+	@GetMapping("/routines")
+	public ResponseEntity<ApiResponse<List<PartnerRoutinesResponseDTO>>> getAllPartnersWithRoutines() {
+		List<PartnerRoutinesResponseDTO> data = partnerService.findAllWithRoutines();
+		return ResponseEntity.ok(ApiResponse.ok("All partners with routines retrieved successfully", data));
 	}
 }

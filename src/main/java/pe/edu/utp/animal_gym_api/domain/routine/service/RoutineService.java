@@ -1,22 +1,20 @@
 package pe.edu.utp.animal_gym_api.domain.routine.service;
 
-import java.util.List;
-
-import pe.edu.utp.animal_gym_api.domain.routine.Routine;
-import pe.edu.utp.animal_gym_api.domain.routine.RoutineDetail;
-import pe.edu.utp.animal_gym_api.domain.routine.dto.RoutineResponseDTO;
+import pe.edu.utp.animal_gym_api.domain.partner.dto.PartnerRoutinesResponseDTO;
+import pe.edu.utp.animal_gym_api.domain.routine.dto.RoutineDetailRequestDTO;
+import pe.edu.utp.animal_gym_api.domain.routine.dto.RoutineRequestDTO;
 
 public interface RoutineService {
-	List<RoutineResponseDTO> findAll();
 
-	RoutineResponseDTO findById(Long id);
+	PartnerRoutinesResponseDTO save(RoutineRequestDTO requestDTO);
 
-	RoutineResponseDTO save(Routine routine);
+	PartnerRoutinesResponseDTO update(Long routineId, RoutineRequestDTO requestDTO);
 
-	void deleteById(Long id);
+	PartnerRoutinesResponseDTO delete(Long partnerId, Long routineId);
 
-	// Métodos para el detalle (ejercicios dentro de la rutina)
-	RoutineResponseDTO addRoutineDetail(Long routineId, RoutineDetail detail);
+	PartnerRoutinesResponseDTO saveDetail(RoutineDetailRequestDTO detailRequestDTO);
 
-	RoutineResponseDTO removeRoutineDetail(Long routineId, Long detailId);
+	PartnerRoutinesResponseDTO updateDetail(Long detailId, RoutineDetailRequestDTO detailRequestDTO);
+
+	PartnerRoutinesResponseDTO deleteDetail(Long partnerId, Long routineId, Long detailId);
 }
