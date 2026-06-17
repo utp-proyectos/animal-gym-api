@@ -6,6 +6,7 @@ import java.util.List;
 import pe.edu.utp.animal_gym_api.domain.partner.dto.PartnerDetailDTO;
 import pe.edu.utp.animal_gym_api.domain.partner.dto.PartnerRequestDTO;
 import pe.edu.utp.animal_gym_api.domain.partner.dto.PartnerResponseDTO;
+import pe.edu.utp.animal_gym_api.domain.partner.dto.PartnerRoutinesResponseDTO;
 
 public interface PartnerService {
 	List<PartnerResponseDTO> findAll();
@@ -27,4 +28,8 @@ public interface PartnerService {
 	List<PartnerResponseDTO> findByMembershipId(Long membershipId);
 
 	List<PartnerResponseDTO> findByName(String name);
+
+	PartnerRoutinesResponseDTO findRoutinesByPartnerId(Long id);
+
+	List<PartnerRoutinesResponseDTO> findAllWithRoutines();
 }

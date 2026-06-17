@@ -2,24 +2,40 @@ package pe.edu.utp.animal_gym_api.domain.routine;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
-import pe.edu.utp.animal_gym_api.domain.employee.Employee;
-import pe.edu.utp.animal_gym_api.domain.employee.dto.EmployeeResponseDTO;
-import pe.edu.utp.animal_gym_api.domain.routine.dto.RoutineDetailResponseDTO;
-import pe.edu.utp.animal_gym_api.domain.routine.dto.RoutineResponseDTO;
+import pe.edu.utp.animal_gym_api.domain.exercises.Exercise;
+import pe.edu.utp.animal_gym_api.domain.partner.Partner;
+import pe.edu.utp.animal_gym_api.domain.partner.dto.PartnerRoutinesResponseDTO;
+import pe.edu.utp.animal_gym_api.domain.routine.dto.RoutineDetailRequestDTO;
+import pe.edu.utp.animal_gym_api.domain.routine.dto.RoutineRequestDTO;
 
 @Mapper(componentModel = "spring")
 public interface RoutineMapper {
 
-	@Mapping(source = "routineDetails", target = "details")
-	RoutineResponseDTO toResponseDto(Routine entity);
+	@Mapping(target = "id", ignore = true)
+	@Mapping(target = "employee", ignore = true)
+	@Mapping(target = "routineDetails", ignore = true)
+	Routine toEntity(RoutineRequestDTO dto);
 
-	@Mapping(source = "exercise.name", target = "exerciseName")
-	@Mapping(source = "exercise.muscleGroup", target = "muscleGroup")
-	@Mapping(source = "exercise.equipment", target = "equipment")
-	RoutineDetailResponseDTO toDetailResponseDto(RoutineDetail entity);
+	@Mapping(target = "id", ignore = true)
+	@Mapping(target = "employee", ignore = true)
+	@Mapping(target = "routineDetails", ignore = true)
+	void updateEntityFromDto(RoutineRequestDTO dto, @MappingTarget Routine routine);
 
-	// llegara como null
-	@Mapping(target = "role", ignore = true)
-	EmployeeResponseDTO toResponseEmployeeDto(Employee employee);
+	@Mapping(target = "id", ignore = true)
+	@Mapping(target = "exercise", ignore = true)
+	RoutineDetail toDetailEntity(RoutineDetailRequestDTO dto);
+
+	@Mapping(target = "id", ignore = true)
+	@Mapping(target = "exercise", ignore = true)
+	void updateDetailEntityFromDto(RoutineDetailRequestDTO dto, @MappingTarget RoutineDetail entity);
+
+	PartnerRoutinesResponseDTO toRoutinesResponseDTO(Partner partner);
+
+	PartnerRoutinesResponseDTO.RoutineInfo toRoutineInfo(Routine routine);
+
+	PartnerRoutinesResponseDTO.DetailInfo toDetailInfo(RoutineDetail routineDetail);
+
+	PartnerRoutinesResponseDTO.ExerciseInfo toExerciseInfo(Exercise exercise);
 }

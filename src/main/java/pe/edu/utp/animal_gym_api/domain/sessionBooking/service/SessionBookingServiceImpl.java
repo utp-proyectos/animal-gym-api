@@ -13,7 +13,6 @@ import pe.edu.utp.animal_gym_api.domain.partner.Partner;
 import pe.edu.utp.animal_gym_api.domain.partner.PartnerRepository;
 import pe.edu.utp.animal_gym_api.domain.session.Session;
 import pe.edu.utp.animal_gym_api.domain.session.SessionRepository;
-import pe.edu.utp.animal_gym_api.domain.session.dto.SessionCardDTO;
 import pe.edu.utp.animal_gym_api.domain.sessionBooking.dto.PartnerEnrolledResponseDTO;
 import pe.edu.utp.animal_gym_api.domain.sessionBooking.SessionBooking;
 import pe.edu.utp.animal_gym_api.domain.sessionBooking.SessionBookingMapper;

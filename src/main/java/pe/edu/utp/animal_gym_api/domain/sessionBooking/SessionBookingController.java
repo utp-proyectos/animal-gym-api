@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import pe.edu.utp.animal_gym_api.common.response.ApiResponse;
-import pe.edu.utp.animal_gym_api.domain.session.dto.SessionCardDTO;
 import pe.edu.utp.animal_gym_api.domain.sessionBooking.dto.PartnerEnrolledRequestDTO;
 import pe.edu.utp.animal_gym_api.domain.sessionBooking.dto.PartnerEnrolledResponseDTO;
 import pe.edu.utp.animal_gym_api.domain.sessionBooking.service.SessionBookingService;

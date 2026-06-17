@@ -16,7 +16,9 @@ import pe.edu.utp.animal_gym_api.domain.partner.PartnerRepository;
 import pe.edu.utp.animal_gym_api.domain.partner.dto.PartnerDetailDTO;
 import pe.edu.utp.animal_gym_api.domain.partner.dto.PartnerRequestDTO;
 import pe.edu.utp.animal_gym_api.domain.partner.dto.PartnerResponseDTO;
+import pe.edu.utp.animal_gym_api.domain.partner.dto.PartnerRoutinesResponseDTO;
 import pe.edu.utp.animal_gym_api.domain.partner.mapper.PartnerMapper;
+import pe.edu.utp.animal_gym_api.domain.routine.RoutineMapper;
 import pe.edu.utp.animal_gym_api.domain.user.User;
 import pe.edu.utp.animal_gym_api.domain.user.UserRepository;
 
@@ -25,12 +27,19 @@ public class PartnerServiceImpl implements PartnerService {
 
 	@Autowired
 	private PartnerRepository partnerRepository;
+
 	@Autowired
 	private MembershipRepository membershipRepository;
+
 	@Autowired
 	private UserRepository userRepository;
+
 	@Autowired
 	private PartnerMapper mapper;
+
+	@Autowired
+	private RoutineMapper routineMapper;
+
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
@@ -140,6 +149,23 @@ public class PartnerServiceImpl implements PartnerService {
 	public List<PartnerResponseDTO> findByName(String name) {
 		return partnerRepository.findByNameContainingIgnoreCase(name).stream()
 				.map(mapper::toResponseDTO)
+				.toList();
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public PartnerRoutinesResponseDTO findRoutinesByPartnerId(Long id) {
+		Partner partner = partnerRepository.findById(id)
+				.orElseThrow(() -> new EntityNotFoundException("Partner not found with ID: " + id));
+
+		return routineMapper.toRoutinesResponseDTO(partner);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<PartnerRoutinesResponseDTO> findAllWithRoutines() {
+		return partnerRepository.findAll().stream()
+				.map(routineMapper::toRoutinesResponseDTO)
 				.toList();
 	}
 }

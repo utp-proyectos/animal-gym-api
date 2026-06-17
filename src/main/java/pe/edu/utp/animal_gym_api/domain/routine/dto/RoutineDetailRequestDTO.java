@@ -5,17 +5,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class RoutineDetailResponseDTO {
-	private Long id;
+@NoArgsConstructor
+public class RoutineDetailRequestDTO {
 	private String dayOfWeek;
 	private Integer sets;
 	private Integer reps;
-	private Double weight;
+	private double weight;
+	private Integer calories;
 	private Integer restTime;
-
-	private String exerciseName;
-	private String muscleGroup;
-	private String equipment;
+	private Long exerciseId;
+	private Long routineId;
+	private Long partnerId;
 }
