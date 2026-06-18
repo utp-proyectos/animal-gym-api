@@ -1,5 +1,6 @@
 package pe.edu.utp.animal_gym_api.domain.membership;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ public class MembershipController {
 
 	@PostMapping
 	public ResponseEntity<ApiResponse<MembershipResponseDTO>> create(
-			@RequestBody MembershipRequestDTO requestDTO) {
+			@ModelAttribute MembershipRequestDTO requestDTO) throws IOException {
 		return ResponseEntity.status(HttpStatus.CREATED)
 				.body(ApiResponse.ok("Membership created successfully",
 						membershipService.create(requestDTO)));
@@ -39,7 +40,7 @@ public class MembershipController {
 
 	@PutMapping("/{id}")
 	public ResponseEntity<ApiResponse<MembershipResponseDTO>> update(
-			@PathVariable Long id, @RequestBody MembershipRequestDTO requestDTO) {
+			@PathVariable Long id, @ModelAttribute MembershipRequestDTO requestDTO) throws IOException {
 		return ResponseEntity.ok(ApiResponse.ok("Membership updated successfully",
 				membershipService.update(id, requestDTO)));
 	}

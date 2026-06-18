@@ -2,6 +2,8 @@ package pe.edu.utp.animal_gym_api.domain.membership.dto;
 
 import java.time.LocalDate;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,7 +20,7 @@ public class MembershipRequestDTO {
 	private Double discountPrice;
 	private LocalDate offerStartDate;
 	private LocalDate offerEndDate;
-	private String image;
+	private MultipartFile image;
 	private Boolean status;
 	private Integer capacityLimit;
 }

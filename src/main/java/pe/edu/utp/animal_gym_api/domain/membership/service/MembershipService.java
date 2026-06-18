@@ -1,5 +1,6 @@
 package pe.edu.utp.animal_gym_api.domain.membership.service;
 
+import java.io.IOException;
 import java.util.List;
 
 import pe.edu.utp.animal_gym_api.domain.membership.dto.MembershipRequestDTO;
@@ -10,9 +11,9 @@ public interface MembershipService {
 
 	MembershipResponseDTO findById(Long id);
 
-	MembershipResponseDTO create(MembershipRequestDTO requestDTO);
+	MembershipResponseDTO create(MembershipRequestDTO requestDTO) throws IOException;
 
-	MembershipResponseDTO update(Long id, MembershipRequestDTO requestDTO);
+	MembershipResponseDTO update(Long id, MembershipRequestDTO requestDTO) throws IOException;
 
 	void delete(Long id);
 

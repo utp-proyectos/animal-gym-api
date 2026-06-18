@@ -1,5 +1,6 @@
 package pe.edu.utp.animal_gym_api.domain.membership.service;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
@@ -9,6 +10,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.persistence.EntityNotFoundException;
 import pe.edu.utp.animal_gym_api.domain.membership.Membership;
@@ -16,6 +18,7 @@ import pe.edu.utp.animal_gym_api.domain.membership.MembershipRepository;
 import pe.edu.utp.animal_gym_api.domain.membership.dto.MembershipRequestDTO;
 import pe.edu.utp.animal_gym_api.domain.membership.dto.MembershipResponseDTO;
 import pe.edu.utp.animal_gym_api.domain.membership.mapper.MembershipMapper;
+import pe.edu.utp.animal_gym_api.domain.storage.StorageService;
 
 @Service
 public class MembershipServiceImpl implements MembershipService {
@@ -23,6 +26,8 @@ public class MembershipServiceImpl implements MembershipService {
 	private MembershipRepository membershipRepository;
 	@Autowired
 	private MembershipMapper membershipMapper;
+	@Autowired
+	private StorageService storageService;
 
 	@Override
 	public List<MembershipResponseDTO> findAll() {
@@ -43,17 +48,34 @@ public class MembershipServiceImpl implements MembershipService {
 
 	@Override
 	@Transactional
-	public MembershipResponseDTO create(MembershipRequestDTO requestDTO) {
-		Membership saved = membershipRepository.save(membershipMapper.toEntity(requestDTO));
+	public MembershipResponseDTO create(MembershipRequestDTO requestDTO) throws IOException {
+		Membership membership = membershipMapper.toEntity(requestDTO);
+
+		MultipartFile imageFile = requestDTO.getImage();
+
+		if (imageFile != null && !imageFile.isEmpty()) {
+			String imageUrl = storageService.upload(imageFile, "memberships");
+			membership.setImage(imageUrl);
+		}
+
+		Membership saved = membershipRepository.save(membership);
 		return enrich(membershipMapper.toResponseDTO(saved), saved, 0L);
 	}
 
 	@Override
 	@Transactional
-	public MembershipResponseDTO update(Long id, MembershipRequestDTO requestDTO) {
+	public MembershipResponseDTO update(Long id, MembershipRequestDTO requestDTO) throws IOException {
 		Membership existing = membershipRepository.findById(id)
 				.orElseThrow(() -> new EntityNotFoundException("Membership not found with ID: " + id));
+
 		membershipMapper.updateEntityFromDTO(requestDTO, existing);
+
+		MultipartFile imageFile = requestDTO.getImage();
+		if (imageFile != null && !imageFile.isEmpty()) {
+			String imageUrl = storageService.upload(imageFile, "memberships");
+			existing.setImage(imageUrl);
+		}
+
 		Membership saved = membershipRepository.save(existing);
 		Long enrolled = membershipRepository.countActiveByMembershipId(id);
 		return enrich(membershipMapper.toResponseDTO(saved), saved, enrolled);
