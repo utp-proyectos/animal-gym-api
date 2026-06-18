@@ -15,6 +15,7 @@ public interface MembershipMapper {
 	@Mapping(target = "expired", ignore = true)
 	@Mapping(target = "remainingDays", ignore = true)
 	@Mapping(target = "enrolledMembers", ignore = true)
+	@Mapping(target = "image", ignore = true)
 	@Mapping(target = "id", ignore = true)
 	Membership toEntity(MembershipRequestDTO requestDTO);
 
@@ -29,5 +30,6 @@ public interface MembershipMapper {
 	@Mapping(target = "expired", ignore = true)
 	@Mapping(target = "remainingDays", ignore = true)
 	@Mapping(target = "enrolledMembers", ignore = true)
+	@Mapping(target = "image", ignore = true)
 	void updateEntityFromDTO(MembershipRequestDTO requestDTO, @MappingTarget Membership membership);
 }
