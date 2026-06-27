@@ -1,5 +1,6 @@
 package pe.edu.utp.animal_gym_api.domain.partner.service;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -7,8 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.persistence.EntityNotFoundException;
+import pe.edu.utp.animal_gym_api.common.enums.Role;
 import pe.edu.utp.animal_gym_api.domain.membership.Membership;
 import pe.edu.utp.animal_gym_api.domain.membership.MembershipRepository;
 import pe.edu.utp.animal_gym_api.domain.partner.Partner;
@@ -19,6 +22,7 @@ import pe.edu.utp.animal_gym_api.domain.partner.dto.PartnerResponseDTO;
 import pe.edu.utp.animal_gym_api.domain.partner.dto.PartnerRoutinesResponseDTO;
 import pe.edu.utp.animal_gym_api.domain.partner.mapper.PartnerMapper;
 import pe.edu.utp.animal_gym_api.domain.routine.RoutineMapper;
+import pe.edu.utp.animal_gym_api.domain.storage.StorageService;
 import pe.edu.utp.animal_gym_api.domain.user.User;
 import pe.edu.utp.animal_gym_api.domain.user.UserRepository;
 
@@ -42,6 +46,9 @@ public class PartnerServiceImpl implements PartnerService {
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+
+	@Autowired
+	private StorageService storageService;
 
 	@Override
 	public List<PartnerResponseDTO> findAll() {
@@ -68,21 +75,34 @@ public class PartnerServiceImpl implements PartnerService {
 	@Override
 	@Transactional
 	public PartnerResponseDTO create(PartnerRequestDTO requestDTO) {
-		Partner partner = mapper.toEntity(requestDTO);
-
 		Membership membership = membershipRepository.findById(requestDTO.getMembershipId())
 				.orElseThrow(() -> new EntityNotFoundException(
 						"Membership not found with ID: " + requestDTO.getMembershipId()));
+
+		Long enrolled = membershipRepository.countActiveByMembershipId(membership.getId());
+		if (enrolled >= membership.getCapacityLimit()) {
+			throw new IllegalStateException(
+					"La membresía '" + membership.getName() + "' ha alcanzado su límite de cupos ("
+							+ membership.getCapacityLimit() + ")");
+		}
+
+		Partner partner = mapper.toEntity(requestDTO);
 
 		partner.setMembership(membership);
 		partner.setExpirationDate(LocalDate.now().plusDays(membership.getDuration()));
 		partner.setStatus(true);
 		partner.setPoints(0);
+		partner.setRole(Role.SOCIO);
+
+		if (partner.getAvatar() == null || partner.getAvatar().isBlank()) {
+			partner.setAvatar("");
+		}
+
 		Partner saved = partnerRepository.save(partner);
 
 		User user = new User();
 		user.setPassword(passwordEncoder.encode(requestDTO.getPassword()));
-		user.setPerson(saved); // ya no asigna role al user
+		user.setPerson(saved);
 		userRepository.save(user);
 
 		return mapper.toResponseDTO(saved);
@@ -100,16 +120,33 @@ public class PartnerServiceImpl implements PartnerService {
 			Membership membership = membershipRepository.findById(requestDTO.getMembershipId())
 					.orElseThrow(() -> new EntityNotFoundException(
 							"Membership not found with ID: " + requestDTO.getMembershipId()));
+
+			boolean membershipChanged = existing.getMembership() == null
+					|| !existing.getMembership().getId().equals(membership.getId());
+
+			if (membershipChanged) {
+				Long enrolled = membershipRepository.countActiveByMembershipId(membership.getId());
+				if (enrolled >= membership.getCapacityLimit()) {
+					throw new IllegalStateException(
+							"La membresía '" + membership.getName() + "' ha alcanzado su límite de cupos");
+				}
+				existing.setExpirationDate(LocalDate.now().plusDays(membership.getDuration()));
+			}
+
 			existing.setMembership(membership);
-			existing.setExpirationDate(LocalDate.now().plusDays(membership.getDuration()));
+		}
+
+		if (existing.getAvatar() == null) {
+			existing.setAvatar("");
 		}
 
 		Partner saved = partnerRepository.save(existing);
 
 		userRepository.findByPersonId(id).ifPresent(user -> {
-			if (requestDTO.getPassword() != null && !requestDTO.getPassword().isBlank())
+			if (requestDTO.getPassword() != null && !requestDTO.getPassword().isBlank()) {
 				user.setPassword(passwordEncoder.encode(requestDTO.getPassword()));
-			userRepository.save(user);
+				userRepository.save(user);
+			}
 		});
 
 		return mapper.toResponseDTO(saved);
@@ -167,5 +204,16 @@ public class PartnerServiceImpl implements PartnerService {
 		return partnerRepository.findAll().stream()
 				.map(routineMapper::toRoutinesResponseDTO)
 				.toList();
+	}
+
+	@Override
+	@Transactional
+	public String updateAvatar(Long id, MultipartFile file) throws IOException {
+		Partner partner = partnerRepository.findById(id)
+				.orElseThrow(() -> new EntityNotFoundException("Partner not found with ID: " + id));
+		String url = storageService.upload(file, "partners");
+		partner.setAvatar(url);
+		partnerRepository.save(partner);
+		return url;
 	}
 }
