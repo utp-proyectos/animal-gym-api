@@ -2,6 +2,7 @@ package pe.edu.utp.animal_gym_api.domain.partner.service;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.persistence.EntityNotFoundException;
 import pe.edu.utp.animal_gym_api.common.enums.Role;
+import pe.edu.utp.animal_gym_api.domain.bill.Bill;
+import pe.edu.utp.animal_gym_api.domain.bill.BillRepository;
 import pe.edu.utp.animal_gym_api.domain.membership.Membership;
 import pe.edu.utp.animal_gym_api.domain.membership.MembershipRepository;
 import pe.edu.utp.animal_gym_api.domain.partner.Partner;
@@ -37,6 +40,9 @@ public class PartnerServiceImpl implements PartnerService {
 
 	@Autowired
 	private UserRepository userRepository;
+
+	@Autowired
+	private BillRepository billRepository;
 
 	@Autowired
 	private PartnerMapper mapper;
@@ -104,6 +110,19 @@ public class PartnerServiceImpl implements PartnerService {
 		user.setPassword(passwordEncoder.encode(requestDTO.getPassword()));
 		user.setPerson(saved);
 		userRepository.save(user);
+		Double igv = membership.getPrice() * 0.18;
+		Double subTotal = membership.getPrice() - igv;
+
+		Bill bill = new Bill();
+		bill.setIssueDate(LocalDate.now());
+		bill.setTime(LocalTime.now());
+		bill.setSubTotal(subTotal);
+		bill.setIgv(igv);
+		bill.setTotalPrice(membership.getPrice());
+		bill.setStatus(true);
+		bill.setPartner(saved);
+		bill.setEmployee(null);
+		billRepository.save(bill);
 
 		return mapper.toResponseDTO(saved);
 	}
