@@ -3,7 +3,10 @@ package pe.edu.utp.animal_gym_api.domain.partner.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import pe.edu.utp.animal_gym_api.domain.routine.Routine;
+
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -27,5 +30,5 @@ public class PartnerDetailDTO {
 	private String image;
 	private Long membershipId;
 	private String membershipName;
-	// private List<RoutineResponseDTO> routines;
+	private List<Routine> routines;
 }

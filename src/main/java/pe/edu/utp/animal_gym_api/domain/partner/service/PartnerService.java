@@ -1,7 +1,10 @@
 package pe.edu.utp.animal_gym_api.domain.partner.service;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
+
+import org.springframework.web.multipart.MultipartFile;
 
 import pe.edu.utp.animal_gym_api.domain.partner.dto.PartnerDetailDTO;
 import pe.edu.utp.animal_gym_api.domain.partner.dto.PartnerRequestDTO;
@@ -32,4 +35,6 @@ public interface PartnerService {
 	PartnerRoutinesResponseDTO findRoutinesByPartnerId(Long id);
 
 	List<PartnerRoutinesResponseDTO> findAllWithRoutines();
+
+	String updateAvatar(Long id, MultipartFile file) throws IOException;
 }

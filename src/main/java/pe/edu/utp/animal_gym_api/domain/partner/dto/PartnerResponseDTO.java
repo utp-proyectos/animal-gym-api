@@ -17,6 +17,7 @@ public class PartnerResponseDTO {
     private String phoneNumber;
     private String email;
     private String image;
+    private LocalDate expirationDate;
     private Boolean status;
     private LocalDate hireDate;
     private Long membershipId;
