@@ -1,6 +1,5 @@
 package pe.edu.utp.animal_gym_api.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,15 +23,19 @@ import pe.edu.utp.animal_gym_api.security.jwt.JwtAuthenticationFilter;
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
-	@Autowired
-	private JwtAuthenticationFilter jwtAuthFilter;
+	private final JwtAuthenticationFilter jwtAuthFilter;
 
-	@Autowired
-	@Qualifier("handlerExceptionResolver")
-	private HandlerExceptionResolver resolver;
+	private final HandlerExceptionResolver resolver;
 
-	@Autowired
-	private CorsConfigurationSource corsConfigurationSource;
+	private final CorsConfigurationSource corsConfigurationSource;
+
+	public SecurityConfig(JwtAuthenticationFilter jwtAuthFilter,
+			@Qualifier("handlerExceptionResolver") HandlerExceptionResolver resolver,
+			CorsConfigurationSource corsConfigurationSource) {
+		this.jwtAuthFilter = jwtAuthFilter;
+		this.resolver = resolver;
+		this.corsConfigurationSource = corsConfigurationSource;
+	}
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
