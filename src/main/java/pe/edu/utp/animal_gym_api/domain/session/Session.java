@@ -65,8 +65,7 @@ public class Session {
 	@OnDelete(action = OnDeleteAction.SET_NULL)
 	private Employee employee;
 
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "session_id")
+	@OneToMany(mappedBy = "session", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<SessionBooking> bookings = new ArrayList<>();
 
 	@Transient
