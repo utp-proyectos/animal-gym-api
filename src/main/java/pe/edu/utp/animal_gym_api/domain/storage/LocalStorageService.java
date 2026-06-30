@@ -6,11 +6,13 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
-public class StorageServiceImpl implements StorageService {
+@Profile("dev")
+public class LocalStorageService implements StorageService {
 	@Override
 	public String upload(MultipartFile file, String folder) throws IOException {
 		String destiny = "storage/" + folder + "/";

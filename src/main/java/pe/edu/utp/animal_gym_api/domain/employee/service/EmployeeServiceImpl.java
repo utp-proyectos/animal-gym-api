@@ -55,6 +55,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Transactional
 	public EmployeeResponseDetailDTO save(EmployeeUser dto) throws IOException {
 		String avatar = "";
+
 		if (dto.getAvatar() != null && !dto.getAvatar().isEmpty()) {
 			avatar = storageService.upload(dto.getAvatar(), "employees");
 		} else {

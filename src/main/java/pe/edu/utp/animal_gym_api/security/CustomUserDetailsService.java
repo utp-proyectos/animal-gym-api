@@ -1,18 +1,18 @@
 package pe.edu.utp.animal_gym_api.security;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import lombok.RequiredArgsConstructor;
 import pe.edu.utp.animal_gym_api.domain.user.User;
 import pe.edu.utp.animal_gym_api.domain.user.UserRepository;
 
 @Service
+@RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
-	@Autowired
-	private UserRepository userRepository;
+	private final UserRepository userRepository;
 
 	@Override
 	public UserDetails loadUserByUsername(String dni) throws UsernameNotFoundException {

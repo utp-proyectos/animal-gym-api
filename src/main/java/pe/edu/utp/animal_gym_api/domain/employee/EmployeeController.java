@@ -42,7 +42,6 @@ public class EmployeeController {
 	@PostMapping
 	public ResponseEntity<ApiResponse<EmployeeResponseDetailDTO>> save(
 			@ModelAttribute EmployeeUser dto) throws IOException {
-
 		EmployeeResponseDetailDTO saved = employeeService.save(dto);
 		return ResponseEntity.status(HttpStatus.CREATED)
 				.body(ApiResponse.ok("Employee created successfully", saved));
