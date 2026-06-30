@@ -1,0 +1,17 @@
+name: Deploy Backend to Render
+
+# El trigger: Se activa SOLO cuando se hace un push (o merge completo) en la rama main
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Trigger Render Deployment
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy Trigger via Webhook
+        run: |
+          curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK }}"
