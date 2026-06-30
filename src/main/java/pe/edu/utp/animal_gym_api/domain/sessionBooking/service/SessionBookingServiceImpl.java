@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -55,9 +56,7 @@ public class SessionBookingServiceImpl implements SessionBookingService {
 	@Override
 	@Transactional
 	public void addBooking(Long sessionId, String dni) {
-		Session session = sessionRepository.findById(sessionId)
-				.orElseThrow(() -> new EntityNotFoundException("Sesión no encontrada con ID: " + sessionId));
-
+		Session session = findEntityById(sessionId, sessionRepository, "Sesión");
 		Partner partner = partnerRepository.findByDni(dni)
 				.orElseThrow(() -> new EntityNotFoundException("No existe ningún socio registrado con el DNI: " + dni));
 
@@ -85,8 +84,7 @@ public class SessionBookingServiceImpl implements SessionBookingService {
 			throw new EntityNotFoundException("Sesión no encontrada con ID: " + sessionId);
 		}
 
-		SessionBooking booking = sessionBookingRepository.findById(bookingId)
-				.orElseThrow(() -> new EntityNotFoundException("Reserva no encontrada con ID: " + bookingId));
+		SessionBooking booking = findEntityById(bookingId, sessionBookingRepository, "Reserva");
 
 		if (!booking.getSession().getId().equals(sessionId)) {
 			throw new DataIntegrityViolationException("La reserva no corresponde a la sesión especificada.");
@@ -103,22 +101,17 @@ public class SessionBookingServiceImpl implements SessionBookingService {
 	}
 
 	@Override
+	@Transactional
 	public void subscribe(Long partnerId, Long sessionId) {
-		// Validar si ya existe la reserva
 		if (sessionBookingRepository.existsByPartner_IdAndSession_Id(partnerId, sessionId)) {
-			throw new DataIntegrityViolationException("Partner is already subscribed to this session.");
+			throw new DataIntegrityViolationException("El socio ya está inscrito en esta sesión.");
 		}
 
-		// Buscar entidades o lanzar 404 si no existen
-		Partner partner = partnerRepository.findById(partnerId)
-				.orElseThrow(() -> new EntityNotFoundException("Partner not found with ID: " + partnerId));
+		Partner partner = findEntityById(partnerId, partnerRepository, "Socio");
+		Session session = findEntityById(sessionId, sessionRepository, "Sesión");
 
-		Session session = sessionRepository.findById(sessionId)
-				.orElseThrow(() -> new EntityNotFoundException("Session not found with ID: " + sessionId));
-
-		// Validar capacidad de la sesión
 		if (session.getBookings().size() >= session.getCapacity()) {
-			throw new DataIntegrityViolationException("The session is full.");
+			throw new DataIntegrityViolationException("La sesión está llena.");
 		}
 
 		SessionBooking booking = new SessionBooking();
@@ -126,6 +119,7 @@ public class SessionBookingServiceImpl implements SessionBookingService {
 		booking.setSession(session);
 		booking.setDate(LocalDate.now());
 
+		session.getBookings().add(booking);
 		sessionBookingRepository.save(booking);
 	}
 
@@ -138,4 +132,10 @@ public class SessionBookingServiceImpl implements SessionBookingService {
 
 		sessionBookingRepository.deleteByPartnerIdAndSessionId(partnerId, sessionId);
 	}
+
+	private <T> T findEntityById(Long id, CrudRepository<T, Long> repository, String entityName) {
+		return repository.findById(id)
+				.orElseThrow(() -> new EntityNotFoundException(entityName + " no encontrado con ID: " + id));
+	}
+
 }
