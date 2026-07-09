@@ -8,4 +8,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface BillRepository extends JpaRepository<Bill, Long> {
 	List<Bill> findByPartnerId(Long partnerId);
+
+	List<Bill> findByPartner_Dni(String dni);
+
 }

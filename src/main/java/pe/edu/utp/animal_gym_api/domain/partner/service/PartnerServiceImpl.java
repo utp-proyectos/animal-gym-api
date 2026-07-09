@@ -122,6 +122,19 @@ public class PartnerServiceImpl implements PartnerService {
 		bill.setStatus(true);
 		bill.setPartner(saved);
 		bill.setEmployee(null);
+
+		// Snapshot del socio
+		bill.setPartnerDni(saved.getDni());
+		bill.setPartnerFirstName(saved.getFirstName());
+		bill.setPartnerLastName(saved.getLastName());
+
+		bill.setEmployeeDni(null);
+		bill.setEmployeeFirstName("Sistema");
+		bill.setEmployeeLastName("(auto-registro)");
+
+		// Snapshot de la membresía
+		bill.setMembershipName(membership.getName());
+
 		billRepository.save(bill);
 
 		return mapper.toResponseDTO(saved);

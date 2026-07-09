@@ -3,39 +3,38 @@ package pe.edu.utp.animal_gym_api.domain.employee.service;
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import pe.edu.utp.animal_gym_api.domain.employee.Employee;
 import pe.edu.utp.animal_gym_api.domain.employee.EmployeeMapper;
 import pe.edu.utp.animal_gym_api.domain.employee.EmployeeRepository;
 import pe.edu.utp.animal_gym_api.domain.employee.dto.EmployeeResponseDetailDTO;
 import pe.edu.utp.animal_gym_api.domain.employee.dto.EmployeeUser;
+import pe.edu.utp.animal_gym_api.domain.person.PersonValidator;
 import pe.edu.utp.animal_gym_api.domain.storage.StorageService;
 import pe.edu.utp.animal_gym_api.domain.user.User;
 import pe.edu.utp.animal_gym_api.domain.user.UserRepository;
 
 @Service
+@RequiredArgsConstructor
+
 public class EmployeeServiceImpl implements EmployeeService {
 
-	@Autowired
-	private PasswordEncoder passwordEncoder;
+	private final PasswordEncoder passwordEncoder;
 
-	@Autowired
-	private EmployeeRepository employeeRepository;
+	private final EmployeeRepository employeeRepository;
 
-	@Autowired
-	private UserRepository userRepository;
+	private final UserRepository userRepository;
 
-	@Autowired
-	private EmployeeMapper employeeMapper;
+	private final EmployeeMapper employeeMapper;
 
-	@Autowired
-	private StorageService storageService;
+	private final StorageService storageService;
+
+	private final PersonValidator personValidator;
 
 	@Override
 	public List<EmployeeResponseDetailDTO> findAll() {
@@ -54,6 +53,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Override
 	@Transactional
 	public EmployeeResponseDetailDTO save(EmployeeUser dto) throws IOException {
+
+		personValidator.validateUniqueForCreate(dto.getDni(), dto.getEmail(), dto.getPhoneNumber());
 		String avatar = "";
 
 		if (dto.getAvatar() != null && !dto.getAvatar().isEmpty()) {
@@ -82,6 +83,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Override
 	@Transactional
 	public EmployeeResponseDetailDTO update(Long id, EmployeeUser dto) throws IOException {
+		personValidator.validateUniqueForUpdate(id, dto.getDni(), dto.getEmail(), dto.getPhoneNumber());
+
 		Employee existing = employeeRepository.findById(id)
 				.orElseThrow(() -> new RuntimeException("Empleado no encontrado"));
 
