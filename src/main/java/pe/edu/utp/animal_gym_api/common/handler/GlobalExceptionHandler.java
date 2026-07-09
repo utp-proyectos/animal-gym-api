@@ -20,6 +20,7 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ConstraintViolationException;
+import pe.edu.utp.animal_gym_api.common.exception.DuplicateResourceException;
 import pe.edu.utp.animal_gym_api.common.response.ApiResponse;
 
 @RestControllerAdvice
@@ -128,5 +129,13 @@ public class GlobalExceptionHandler {
 		return ResponseEntity
 				.status(HttpStatus.INTERNAL_SERVER_ERROR)
 				.body(ApiResponse.error("Error interno del servidor: " + ex.getMessage()));
+	}
+
+	// Duplicate
+	@ExceptionHandler(DuplicateResourceException.class)
+	public ResponseEntity<ApiResponse<Void>> handleDuplicateResourceException(DuplicateResourceException ex) {
+		return ResponseEntity
+				.status(HttpStatus.CONFLICT)
+				.body(ApiResponse.error(ex.getMessage()));
 	}
 }
