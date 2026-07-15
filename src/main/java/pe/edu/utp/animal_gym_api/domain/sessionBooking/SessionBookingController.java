@@ -2,7 +2,6 @@ package pe.edu.utp.animal_gym_api.domain.sessionBooking;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,17 +13,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import lombok.RequiredArgsConstructor;
 import pe.edu.utp.animal_gym_api.common.response.ApiResponse;
 import pe.edu.utp.animal_gym_api.domain.sessionBooking.dto.PartnerEnrolledRequestDTO;
 import pe.edu.utp.animal_gym_api.domain.sessionBooking.dto.PartnerEnrolledResponseDTO;
 import pe.edu.utp.animal_gym_api.domain.sessionBooking.service.SessionBookingService;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/bookings")
 public class SessionBookingController {
 
-	@Autowired
-	private SessionBookingService sessionBookingService;
+	private final SessionBookingService sessionBookingService;
 
 	@GetMapping("/partner/{partnerId}")
 	public ResponseEntity<ApiResponse<List<SessionBooking>>> findByPartnerId(@PathVariable Long partnerId) {

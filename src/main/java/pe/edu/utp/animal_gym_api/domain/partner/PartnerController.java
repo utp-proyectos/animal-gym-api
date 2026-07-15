@@ -18,6 +18,7 @@ import pe.edu.utp.animal_gym_api.domain.partner.dto.PartnerRequestDTO;
 import pe.edu.utp.animal_gym_api.domain.partner.dto.PartnerResponseDTO;
 import pe.edu.utp.animal_gym_api.domain.partner.dto.PartnerRoutinesResponseDTO;
 import pe.edu.utp.animal_gym_api.domain.partner.service.PartnerService;
+import pe.edu.utp.animal_gym_api.domain.partner.service.dto.PersonProfileRequest;
 
 @RestController
 @RequestMapping("/api/partners")
@@ -54,6 +55,17 @@ public class PartnerController {
 			@PathVariable Long id, @RequestBody PartnerRequestDTO requestDTO) {
 		return ResponseEntity.ok(ApiResponse.ok("Partner updated successfully",
 				partnerService.update(id, requestDTO)));
+	}
+
+	@PutMapping("/{id}/profile")
+	public ResponseEntity<ApiResponse<PartnerResponseDTO>> updateProfile(
+			@PathVariable Long id,
+			@RequestBody PersonProfileRequest dto) {
+
+		return ResponseEntity.ok(
+				ApiResponse.ok(
+						"Perfil actualizado",
+						partnerService.updateProfile(id, dto)));
 	}
 
 	@DeleteMapping("/{id}")

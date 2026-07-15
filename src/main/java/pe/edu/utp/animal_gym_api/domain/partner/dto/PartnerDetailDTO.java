@@ -27,7 +27,7 @@ public class PartnerDetailDTO {
 	private Integer points;
 	private Double weight;
 	private Double height;
-	private String image;
+	private String avatar;
 	private Long membershipId;
 	private String membershipName;
 	private List<Routine> routines;

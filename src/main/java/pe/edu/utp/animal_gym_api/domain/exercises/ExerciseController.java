@@ -2,20 +2,20 @@ package pe.edu.utp.animal_gym_api.domain.exercises;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import lombok.RequiredArgsConstructor;
 import pe.edu.utp.animal_gym_api.common.response.ApiResponse;
 import pe.edu.utp.animal_gym_api.domain.exercises.service.ExerciseService;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/exercises")
 public class ExerciseController {
 
-	@Autowired
-	private ExerciseService exerciseService;
+	private final ExerciseService exerciseService;
 
 	@GetMapping
 	public ResponseEntity<ApiResponse<List<Exercise>>> findAll() {

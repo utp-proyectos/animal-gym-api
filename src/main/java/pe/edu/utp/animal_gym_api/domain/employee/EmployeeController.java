@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,6 +20,7 @@ import pe.edu.utp.animal_gym_api.common.response.ApiResponse;
 import pe.edu.utp.animal_gym_api.domain.employee.dto.EmployeeResponseDetailDTO;
 import pe.edu.utp.animal_gym_api.domain.employee.dto.EmployeeUser;
 import pe.edu.utp.animal_gym_api.domain.employee.service.EmployeeService;
+import pe.edu.utp.animal_gym_api.domain.partner.service.dto.PersonProfileRequest;
 
 @RestController
 @RequestMapping("/api/employees")
@@ -53,6 +55,17 @@ public class EmployeeController {
 			@ModelAttribute EmployeeUser dto) throws IOException {
 		EmployeeResponseDetailDTO updated = employeeService.update(id, dto);
 		return ResponseEntity.ok(ApiResponse.ok("Employee updated successfully", updated));
+	}
+
+	@PutMapping("/{id}/profile")
+	public ResponseEntity<ApiResponse<EmployeeResponseDetailDTO>> updateProfile(
+			@PathVariable Long id,
+			@RequestBody PersonProfileRequest dto) {
+
+		return ResponseEntity.ok(
+				ApiResponse.ok(
+						"Perfil actualizado",
+						employeeService.updateProfile(id, dto)));
 	}
 
 	@DeleteMapping("/{id}")

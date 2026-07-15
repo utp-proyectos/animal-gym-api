@@ -14,6 +14,7 @@ import pe.edu.utp.animal_gym_api.domain.employee.EmployeeMapper;
 import pe.edu.utp.animal_gym_api.domain.employee.EmployeeRepository;
 import pe.edu.utp.animal_gym_api.domain.employee.dto.EmployeeResponseDetailDTO;
 import pe.edu.utp.animal_gym_api.domain.employee.dto.EmployeeUser;
+import pe.edu.utp.animal_gym_api.domain.partner.service.dto.PersonProfileRequest;
 import pe.edu.utp.animal_gym_api.domain.person.PersonValidator;
 import pe.edu.utp.animal_gym_api.domain.storage.StorageService;
 import pe.edu.utp.animal_gym_api.domain.user.User;
@@ -99,6 +100,33 @@ public class EmployeeServiceImpl implements EmployeeService {
 		}
 
 		employeeRepository.save(employee);
+		return employeeMapper.toDetailDto(employee);
+	}
+
+	@Override
+	@Transactional
+	public EmployeeResponseDetailDTO updateProfile(
+			Long id,
+			PersonProfileRequest dto) {
+
+		Employee employee = employeeRepository.findById(id)
+				.orElseThrow(() -> new EntityNotFoundException("employee not found"));
+
+		personValidator.validateUniqueForUpdate(
+				id,
+				employee.getDni(),
+				dto.getEmail(),
+				dto.getPhoneNumber());
+
+		employee.setFirstName(dto.getFirstName());
+		employee.setLastName(dto.getLastName());
+		employee.setEmail(dto.getEmail());
+		employee.setPhoneNumber(dto.getPhoneNumber());
+		employee.setGender(dto.getGender());
+		employee.setBirthDate(dto.getBirthDate());
+
+		employeeRepository.save(employee);
+
 		return employeeMapper.toDetailDto(employee);
 	}
 

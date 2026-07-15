@@ -24,6 +24,8 @@ import pe.edu.utp.animal_gym_api.domain.partner.dto.PartnerRequestDTO;
 import pe.edu.utp.animal_gym_api.domain.partner.dto.PartnerResponseDTO;
 import pe.edu.utp.animal_gym_api.domain.partner.dto.PartnerRoutinesResponseDTO;
 import pe.edu.utp.animal_gym_api.domain.partner.mapper.PartnerMapper;
+import pe.edu.utp.animal_gym_api.domain.partner.service.dto.PersonProfileRequest;
+import pe.edu.utp.animal_gym_api.domain.person.PersonValidator;
 import pe.edu.utp.animal_gym_api.domain.routine.RoutineMapper;
 import pe.edu.utp.animal_gym_api.domain.storage.StorageService;
 import pe.edu.utp.animal_gym_api.domain.user.User;
@@ -31,6 +33,8 @@ import pe.edu.utp.animal_gym_api.domain.user.UserRepository;
 
 @Service
 public class PartnerServiceImpl implements PartnerService {
+
+	private final PersonValidator personValidator;
 
 	@Autowired
 	private PartnerRepository partnerRepository;
@@ -55,6 +59,10 @@ public class PartnerServiceImpl implements PartnerService {
 
 	@Autowired
 	private StorageService storageService;
+
+	PartnerServiceImpl(PersonValidator personValidator) {
+		this.personValidator = personValidator;
+	}
 
 	@Override
 	public List<PartnerResponseDTO> findAll() {
@@ -182,6 +190,33 @@ public class PartnerServiceImpl implements PartnerService {
 		});
 
 		return mapper.toResponseDTO(saved);
+	}
+
+	@Override
+	@Transactional
+	public PartnerResponseDTO updateProfile(
+			Long id,
+			PersonProfileRequest dto) {
+
+		Partner partner = partnerRepository.findById(id)
+				.orElseThrow(() -> new EntityNotFoundException("Partner not found"));
+
+		personValidator.validateUniqueForUpdate(
+				id,
+				partner.getDni(),
+				dto.getEmail(),
+				dto.getPhoneNumber());
+
+		partner.setFirstName(dto.getFirstName());
+		partner.setLastName(dto.getLastName());
+		partner.setEmail(dto.getEmail());
+		partner.setPhoneNumber(dto.getPhoneNumber());
+		partner.setGender(dto.getGender());
+		partner.setBirthDate(dto.getBirthDate());
+
+		partnerRepository.save(partner);
+
+		return mapper.toResponseDTO(partner);
 	}
 
 	@Override

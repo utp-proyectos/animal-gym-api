@@ -11,6 +11,7 @@ import pe.edu.utp.animal_gym_api.common.enums.Role;
 public class AuthResponse {
 	private String token;
 	private Long id;
+	private Long personId;
 	private String dni;
 	private String firstName;
 	private String lastName;
