@@ -10,6 +10,7 @@ import pe.edu.utp.animal_gym_api.domain.partner.dto.PartnerDetailDTO;
 import pe.edu.utp.animal_gym_api.domain.partner.dto.PartnerRequestDTO;
 import pe.edu.utp.animal_gym_api.domain.partner.dto.PartnerResponseDTO;
 import pe.edu.utp.animal_gym_api.domain.partner.dto.PartnerRoutinesResponseDTO;
+import pe.edu.utp.animal_gym_api.domain.partner.service.dto.PersonProfileRequest;
 
 public interface PartnerService {
 	List<PartnerResponseDTO> findAll();
@@ -37,4 +38,6 @@ public interface PartnerService {
 	List<PartnerRoutinesResponseDTO> findAllWithRoutines();
 
 	String updateAvatar(Long id, MultipartFile file) throws IOException;
+
+	PartnerResponseDTO updateProfile(Long id, PersonProfileRequest request);
 }

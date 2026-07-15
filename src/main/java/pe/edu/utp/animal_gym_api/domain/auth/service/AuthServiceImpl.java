@@ -33,6 +33,7 @@ public class AuthServiceImpl implements AuthService {
 		AuthResponse response = new AuthResponse(
 				token,
 				user.getId(),
+				user.getPerson().getId(),
 				user.getPerson().getDni(),
 				user.getPerson().getFirstName(),
 				user.getPerson().getLastName(),

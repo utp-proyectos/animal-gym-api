@@ -10,16 +10,16 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PartnerResponseDTO {
-    private Long id;
-    private String dni;
-    private String firstName;
-    private String lastName;
-    private String phoneNumber;
-    private String email;
-    private String image;
-    private LocalDate expirationDate;
-    private Boolean status;
-    private LocalDate hireDate;
-    private Long membershipId;
-    private String membershipName;
+	private Long id;
+	private String dni;
+	private String firstName;
+	private String lastName;
+	private String phoneNumber;
+	private String email;
+	private String avatar;
+	private LocalDate expirationDate;
+	private Boolean status;
+	private LocalDate hireDate;
+	private Long membershipId;
+	private String membershipName;
 }

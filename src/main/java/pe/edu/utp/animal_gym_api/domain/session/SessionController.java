@@ -3,7 +3,6 @@ package pe.edu.utp.animal_gym_api.domain.session;
 import java.io.IOException;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,17 +15,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import lombok.RequiredArgsConstructor;
 import pe.edu.utp.animal_gym_api.common.response.ApiResponse;
 import pe.edu.utp.animal_gym_api.domain.session.dto.SessionCardDTO;
 import pe.edu.utp.animal_gym_api.domain.session.dto.SessionRequestDTO;
 import pe.edu.utp.animal_gym_api.domain.session.service.SessionService;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/sessions")
 public class SessionController {
 
-	@Autowired
-	private SessionService sessionService;
+	private final SessionService sessionService;
 
 	@GetMapping
 	public ResponseEntity<ApiResponse<List<SessionCardDTO>>> findAll(

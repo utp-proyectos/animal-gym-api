@@ -1,6 +1,5 @@
 package pe.edu.utp.animal_gym_api.domain.routine;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import pe.edu.utp.animal_gym_api.common.response.ApiResponse;
 import pe.edu.utp.animal_gym_api.domain.partner.dto.PartnerRoutinesResponseDTO;
 import pe.edu.utp.animal_gym_api.domain.routine.dto.RoutineDetailRequestDTO;
@@ -20,11 +20,11 @@ import pe.edu.utp.animal_gym_api.domain.routine.dto.RoutineRequestDTO;
 import pe.edu.utp.animal_gym_api.domain.routine.service.RoutineService;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/routines")
 public class RoutineController {
 
-	@Autowired
-	RoutineService routineService;
+	private final RoutineService routineService;
 
 	@PostMapping
 	public ResponseEntity<ApiResponse<PartnerRoutinesResponseDTO>> save(

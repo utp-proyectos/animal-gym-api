@@ -5,6 +5,7 @@ import java.util.List;
 
 import pe.edu.utp.animal_gym_api.domain.employee.dto.EmployeeResponseDetailDTO;
 import pe.edu.utp.animal_gym_api.domain.employee.dto.EmployeeUser;
+import pe.edu.utp.animal_gym_api.domain.partner.service.dto.PersonProfileRequest;
 
 public interface EmployeeService {
 	List<EmployeeResponseDetailDTO> findAll();
@@ -16,4 +17,8 @@ public interface EmployeeService {
 	void delete(Long id);
 
 	EmployeeResponseDetailDTO update(Long id, EmployeeUser dto) throws IOException;
+
+	public EmployeeResponseDetailDTO updateProfile(
+			Long id,
+			PersonProfileRequest dto);
 }

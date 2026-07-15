@@ -3,13 +3,13 @@ package pe.edu.utp.animal_gym_api.domain.sessionBooking.service;
 import java.time.LocalDate;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import pe.edu.utp.animal_gym_api.domain.partner.Partner;
 import pe.edu.utp.animal_gym_api.domain.partner.PartnerRepository;
 import pe.edu.utp.animal_gym_api.domain.session.Session;
@@ -20,19 +20,17 @@ import pe.edu.utp.animal_gym_api.domain.sessionBooking.SessionBookingMapper;
 import pe.edu.utp.animal_gym_api.domain.sessionBooking.SessionBookingRepository;
 
 @Service
+@RequiredArgsConstructor
 public class SessionBookingServiceImpl implements SessionBookingService {
 
-	@Autowired
-	SessionBookingRepository sessionBookingRepository;
 
-	@Autowired
-	SessionRepository sessionRepository;
+	private final SessionBookingRepository sessionBookingRepository;
 
-	@Autowired
-	PartnerRepository partnerRepository;
+	private final SessionRepository sessionRepository;
 
-	@Autowired
-	SessionBookingMapper sessionBookingMapper;
+	private final PartnerRepository partnerRepository;
+
+	private final SessionBookingMapper sessionBookingMapper;
 
 	@Override
 	public List<SessionBooking> findByPartnerId(Long partnerId) {
@@ -124,6 +122,7 @@ public class SessionBookingServiceImpl implements SessionBookingService {
 	}
 
 	@Override
+	@Transactional
 	public void cancel(Long partnerId, Long sessionId) {
 		// Validamos existencia antes de borrar
 		if (!sessionBookingRepository.existsByPartner_IdAndSession_Id(partnerId, sessionId)) {
