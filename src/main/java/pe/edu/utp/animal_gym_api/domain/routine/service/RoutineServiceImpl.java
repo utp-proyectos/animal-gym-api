@@ -1,10 +1,10 @@
 package pe.edu.utp.animal_gym_api.domain.routine.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import pe.edu.utp.animal_gym_api.domain.employee.Employee;
 import pe.edu.utp.animal_gym_api.domain.employee.EmployeeRepository;
 import pe.edu.utp.animal_gym_api.domain.exercises.Exercise;
@@ -20,22 +20,18 @@ import pe.edu.utp.animal_gym_api.domain.routine.dto.RoutineDetailRequestDTO;
 import pe.edu.utp.animal_gym_api.domain.routine.dto.RoutineRequestDTO;
 
 @Service
+@RequiredArgsConstructor
 public class RoutineServiceImpl implements RoutineService {
 
-	@Autowired
-	RoutineRepository routineRepository;
+	private final RoutineRepository routineRepository;
 
-	@Autowired
-	ExerciseRepository exerciseRepository;
+	private final ExerciseRepository exerciseRepository;
 
-	@Autowired
-	EmployeeRepository employeeRepository;
+	private final EmployeeRepository employeeRepository;
 
-	@Autowired
-	PartnerRepository partnerRepository;
+	private final PartnerRepository partnerRepository;
 
-	@Autowired
-	RoutineMapper routineMapper;
+	private final RoutineMapper routineMapper;
 
 	@Override
 	@Transactional

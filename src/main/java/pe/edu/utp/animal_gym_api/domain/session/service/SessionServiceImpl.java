@@ -8,14 +8,12 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 import pe.edu.utp.animal_gym_api.domain.employee.Employee;
 import pe.edu.utp.animal_gym_api.domain.employee.EmployeeRepository;
-import pe.edu.utp.animal_gym_api.domain.partner.PartnerRepository;
 import pe.edu.utp.animal_gym_api.domain.session.Session;
 import pe.edu.utp.animal_gym_api.domain.session.SessionMapper;
 import pe.edu.utp.animal_gym_api.domain.session.SessionRepository;
@@ -25,33 +23,34 @@ import pe.edu.utp.animal_gym_api.domain.sessionBooking.SessionBookingRepository;
 import pe.edu.utp.animal_gym_api.domain.storage.StorageService;
 
 @Service
+@RequiredArgsConstructor
 public class SessionServiceImpl implements SessionService {
 
-	@Autowired
-	SessionRepository sessionRepository;
+	private final SessionRepository sessionRepository;
 
-	@Autowired
-	SessionBookingRepository sessionBookingRepository;
+	private final SessionBookingRepository sessionBookingRepository;
 
-	@Autowired
-	SessionMapper sessionMapper;
+	private final SessionMapper sessionMapper;
 
-	@Autowired
-	EmployeeRepository employeeRepository;
+	private final EmployeeRepository employeeRepository;
 
-	@Autowired
-	PartnerRepository partnerRepository;
-
-	@Autowired
-	StorageService storageService;
+	private final StorageService storageService;
 
 	@Override
 	public List<SessionCardDTO> findAll(Long currentPartnerId) {
+
+		System.out.println("currentPartnerId: " + currentPartnerId);
+
 		return sessionRepository.findAll().stream()
 				.map(session -> {
 					SessionCardDTO dto = sessionMapper.toCardDTO(session);
 					dto.setStatus(determineStatus(session.getDate(), session.getStartTime(), session.getEndTime()));
-					dto.setEnrolled(isPartnerEnrolled(session, currentPartnerId));
+
+					// Evaluamos si el socio actual está inscrito
+					boolean isEnrolled = sessionBookingRepository.existsByPartner_IdAndSession_Id(currentPartnerId,
+							session.getId());
+					dto.setEnrolled(isEnrolled);
+
 					dto.setBookingsCount(session.getBookings().size());
 					return dto;
 				})
@@ -60,11 +59,17 @@ public class SessionServiceImpl implements SessionService {
 
 	@Override
 	public SessionCardDTO findById(Long id, Long currentPartnerId) {
+		System.out.println("currentPartnerId: " + currentPartnerId);
 		return sessionRepository.findById(id)
 				.map(session -> {
 					SessionCardDTO dto = sessionMapper.toCardDTO(session);
 					dto.setStatus(determineStatus(session.getDate(), session.getStartTime(), session.getEndTime()));
-					dto.setEnrolled(isPartnerEnrolled(session, currentPartnerId));
+
+					// Evaluamos si el socio actual está inscrito
+					boolean isEnrolled = sessionBookingRepository.existsByPartner_IdAndSession_Id(currentPartnerId,
+							session.getId());
+					dto.setEnrolled(isEnrolled);
+
 					dto.setBookingsCount(session.getBookings().size());
 					return dto;
 				})
@@ -142,13 +147,6 @@ public class SessionServiceImpl implements SessionService {
 			throw new EntityNotFoundException("No se puede eliminar: No existe la sesión con ID: " + id);
 		}
 		sessionRepository.deleteById(id);
-	}
-
-	private Boolean isPartnerEnrolled(Session session, Long partnerId) {
-		if (partnerId == null || session.getBookings() == null)
-			return false;
-		return session.getBookings().stream()
-				.anyMatch(b -> b.getPartner() != null && b.getPartner().getId().equals(partnerId));
 	}
 
 	private int calculateDuration(SessionRequestDTO dto) {

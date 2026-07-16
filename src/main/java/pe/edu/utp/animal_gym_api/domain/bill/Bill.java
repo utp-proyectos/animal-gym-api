@@ -60,4 +60,24 @@ public class Bill {
 	@OnDelete(action = OnDeleteAction.SET_NULL)
 	private Employee employee;
 
+	@Column(name = "partner_dni", length = 8)
+	private String partnerDni;
+
+	@Column(name = "partner_first_name", length = 100)
+	private String partnerFirstName;
+
+	@Column(name = "partner_last_name", length = 100)
+	private String partnerLastName;
+
+	@Column(name = "employee_dni", length = 8)
+	private String employeeDni;
+
+	@Column(name = "employee_first_name", length = 100)
+	private String employeeFirstName;
+
+	@Column(name = "employee_last_name", length = 100)
+	private String employeeLastName;
+
+	@Column(name = "membership_name", length = 100)
+	private String membershipName;
 }

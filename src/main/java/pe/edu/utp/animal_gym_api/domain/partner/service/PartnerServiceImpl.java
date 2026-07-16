@@ -2,7 +2,6 @@ package pe.edu.utp.animal_gym_api.domain.partner.service;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +12,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.persistence.EntityNotFoundException;
 import pe.edu.utp.animal_gym_api.common.enums.Role;
-import pe.edu.utp.animal_gym_api.domain.bill.Bill;
-import pe.edu.utp.animal_gym_api.domain.bill.BillRepository;
-import pe.edu.utp.animal_gym_api.domain.membership.Membership;
-import pe.edu.utp.animal_gym_api.domain.membership.MembershipRepository;
 import pe.edu.utp.animal_gym_api.domain.partner.Partner;
 import pe.edu.utp.animal_gym_api.domain.partner.PartnerRepository;
 import pe.edu.utp.animal_gym_api.domain.partner.dto.PartnerDetailDTO;
@@ -24,7 +19,10 @@ import pe.edu.utp.animal_gym_api.domain.partner.dto.PartnerRequestDTO;
 import pe.edu.utp.animal_gym_api.domain.partner.dto.PartnerResponseDTO;
 import pe.edu.utp.animal_gym_api.domain.partner.dto.PartnerRoutinesResponseDTO;
 import pe.edu.utp.animal_gym_api.domain.partner.mapper.PartnerMapper;
+import pe.edu.utp.animal_gym_api.domain.partner.service.dto.PersonProfileRequest;
+import pe.edu.utp.animal_gym_api.domain.person.PersonValidator;
 import pe.edu.utp.animal_gym_api.domain.routine.RoutineMapper;
+import pe.edu.utp.animal_gym_api.domain.person.PersonValidator;
 import pe.edu.utp.animal_gym_api.domain.storage.StorageService;
 import pe.edu.utp.animal_gym_api.domain.user.User;
 import pe.edu.utp.animal_gym_api.domain.user.UserRepository;
@@ -36,13 +34,10 @@ public class PartnerServiceImpl implements PartnerService {
 	private PartnerRepository partnerRepository;
 
 	@Autowired
-	private MembershipRepository membershipRepository;
-
-	@Autowired
 	private UserRepository userRepository;
 
 	@Autowired
-	private BillRepository billRepository;
+	private PersonValidator personValidator;
 
 	@Autowired
 	private PartnerMapper mapper;
@@ -55,6 +50,10 @@ public class PartnerServiceImpl implements PartnerService {
 
 	@Autowired
 	private StorageService storageService;
+
+	PartnerServiceImpl(PersonValidator personValidator) {
+		this.personValidator = personValidator;
+	}
 
 	@Override
 	public List<PartnerResponseDTO> findAll() {
@@ -81,21 +80,13 @@ public class PartnerServiceImpl implements PartnerService {
 	@Override
 	@Transactional
 	public PartnerResponseDTO create(PartnerRequestDTO requestDTO) {
-		Membership membership = membershipRepository.findById(requestDTO.getMembershipId())
-				.orElseThrow(() -> new EntityNotFoundException(
-						"Membership not found with ID: " + requestDTO.getMembershipId()));
-
-		Long enrolled = membershipRepository.countActiveByMembershipId(membership.getId());
-		if (enrolled >= membership.getCapacityLimit()) {
-			throw new IllegalStateException(
-					"La membresía '" + membership.getName() + "' ha alcanzado su límite de cupos ("
-							+ membership.getCapacityLimit() + ")");
-		}
+		personValidator.validateUniqueForCreate(
+				requestDTO.getDni(), requestDTO.getEmail(), requestDTO.getPhoneNumber());
 
 		Partner partner = mapper.toEntity(requestDTO);
 
-		partner.setMembership(membership);
-		partner.setExpirationDate(LocalDate.now().plusDays(membership.getDuration()));
+		partner.setMembership(null);
+		partner.setExpirationDate(null);
 		partner.setStatus(true);
 		partner.setPoints(0);
 		partner.setRole(Role.SOCIO);
@@ -110,19 +101,6 @@ public class PartnerServiceImpl implements PartnerService {
 		user.setPassword(passwordEncoder.encode(requestDTO.getPassword()));
 		user.setPerson(saved);
 		userRepository.save(user);
-		Double igv = membership.getPrice() * 0.18;
-		Double subTotal = membership.getPrice() - igv;
-
-		Bill bill = new Bill();
-		bill.setIssueDate(LocalDate.now());
-		bill.setTime(LocalTime.now());
-		bill.setSubTotal(subTotal);
-		bill.setIgv(igv);
-		bill.setTotalPrice(membership.getPrice());
-		bill.setStatus(true);
-		bill.setPartner(saved);
-		bill.setEmployee(null);
-		billRepository.save(bill);
 
 		return mapper.toResponseDTO(saved);
 	}
@@ -132,28 +110,10 @@ public class PartnerServiceImpl implements PartnerService {
 	public PartnerResponseDTO update(Long id, PartnerRequestDTO requestDTO) {
 		Partner existing = partnerRepository.findById(id)
 				.orElseThrow(() -> new EntityNotFoundException("Partner not found with ID: " + id));
+		personValidator.validateUniqueForUpdate(
+				id, requestDTO.getDni(), requestDTO.getEmail(), requestDTO.getPhoneNumber());
 
 		mapper.updateEntityFromDTO(requestDTO, existing);
-
-		if (requestDTO.getMembershipId() != null) {
-			Membership membership = membershipRepository.findById(requestDTO.getMembershipId())
-					.orElseThrow(() -> new EntityNotFoundException(
-							"Membership not found with ID: " + requestDTO.getMembershipId()));
-
-			boolean membershipChanged = existing.getMembership() == null
-					|| !existing.getMembership().getId().equals(membership.getId());
-
-			if (membershipChanged) {
-				Long enrolled = membershipRepository.countActiveByMembershipId(membership.getId());
-				if (enrolled >= membership.getCapacityLimit()) {
-					throw new IllegalStateException(
-							"La membresía '" + membership.getName() + "' ha alcanzado su límite de cupos");
-				}
-				existing.setExpirationDate(LocalDate.now().plusDays(membership.getDuration()));
-			}
-
-			existing.setMembership(membership);
-		}
 
 		if (existing.getAvatar() == null) {
 			existing.setAvatar("");
@@ -169,6 +129,33 @@ public class PartnerServiceImpl implements PartnerService {
 		});
 
 		return mapper.toResponseDTO(saved);
+	}
+
+	@Override
+	@Transactional
+	public PartnerResponseDTO updateProfile(
+			Long id,
+			PersonProfileRequest dto) {
+
+		Partner partner = partnerRepository.findById(id)
+				.orElseThrow(() -> new EntityNotFoundException("Partner not found"));
+
+		personValidator.validateUniqueForUpdate(
+				id,
+				partner.getDni(),
+				dto.getEmail(),
+				dto.getPhoneNumber());
+
+		partner.setFirstName(dto.getFirstName());
+		partner.setLastName(dto.getLastName());
+		partner.setEmail(dto.getEmail());
+		partner.setPhoneNumber(dto.getPhoneNumber());
+		partner.setGender(dto.getGender());
+		partner.setBirthDate(dto.getBirthDate());
+
+		partnerRepository.save(partner);
+
+		return mapper.toResponseDTO(partner);
 	}
 
 	@Override

@@ -24,6 +24,7 @@ public interface SessionMapper {
 	@Mapping(target = "date", source = "date")
 	@Mapping(target = "startTime", source = "startTime")
 	@Mapping(target = "endTime", source = "endTime")
+	@Mapping(target = "bookingsCount", ignore = true)
 	SessionCardDTO toCardDTO(Session session);
 
 }

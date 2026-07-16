@@ -15,24 +15,24 @@ public interface PartnerMapper {
 	@Mapping(target = "id", ignore = true)
 	@Mapping(target = "membership", ignore = true)
 	@Mapping(target = "routines", ignore = true)
-	@Mapping(target = "avatar", source = "image")
 	Partner toEntity(PartnerRequestDTO requestDTO);
 
 	@Mapping(target = "membershipId", source = "membership.id")
 	@Mapping(target = "membershipName", source = "membership.name")
-	@Mapping(target = "image", source = "avatar")
 	PartnerResponseDTO toResponseDTO(Partner partner);
 
 	@Mapping(target = "membershipId", source = "membership.id")
 	@Mapping(target = "membershipName", source = "membership.name")
 	@Mapping(target = "routines", source = "routines")
-	@Mapping(target = "image", source = "avatar")
 	PartnerDetailDTO toDetailDTO(Partner partner);
 
 	@Mapping(target = "id", ignore = true)
 	@Mapping(target = "membership", ignore = true)
 	@Mapping(target = "routines", ignore = true)
-	@Mapping(target = "avatar", source = "image")
+	@Mapping(target = "avatar", ignore = true)
 	@Mapping(target = "expirationDate", ignore = true)
+	@Mapping(target = "status", ignore = true)
+	@Mapping(target = "points", ignore = true)
+	@Mapping(target = "role", ignore = true)
 	void updateEntityFromDTO(PartnerRequestDTO requestDTO, @MappingTarget Partner partner);
 }

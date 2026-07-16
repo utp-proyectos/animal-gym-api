@@ -1,20 +1,25 @@
 package pe.edu.utp.animal_gym_api.domain.partner;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-@Repository
+import jakarta.persistence.LockModeType;
+
 public interface PartnerRepository extends JpaRepository<Partner, Long> {
 
 	List<Partner> findByStatus(Boolean status);
 
 	Optional<Partner> findByDni(String dni);
+
+	@Lock(LockModeType.PESSIMISTIC_WRITE)
+	@Query("SELECT p FROM Partner p WHERE p.dni = :dni")
+	Optional<Partner> findByDniForUpdate(@Param("dni") String dni);
 
 	List<Partner> findByExpirationDateBetween(LocalDate startDate, LocalDate endDate);
 
