@@ -29,7 +29,10 @@ public interface PartnerMapper {
 	@Mapping(target = "id", ignore = true)
 	@Mapping(target = "membership", ignore = true)
 	@Mapping(target = "routines", ignore = true)
-	@Mapping(target = "avatar", source = "image")
+	@Mapping(target = "avatar", ignore = true)
 	@Mapping(target = "expirationDate", ignore = true)
+	@Mapping(target = "status", ignore = true)
+	@Mapping(target = "points", ignore = true)
+	@Mapping(target = "role", ignore = true)
 	void updateEntityFromDTO(PartnerRequestDTO requestDTO, @MappingTarget Partner partner);
 }
