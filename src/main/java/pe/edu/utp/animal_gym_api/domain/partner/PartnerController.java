@@ -42,7 +42,7 @@ public class PartnerController {
 	}
 
 	@GetMapping("/{id}/detail")
-	@PreAuthorize("hasAnyRole('ADMIN', 'RECEPCIONISTA')")
+	@PreAuthorize("hasAnyRole('ADMIN', 'RECEPCIONISTA', 'SOCIO')")
 	public ResponseEntity<ApiResponse<PartnerDetailDTO>> findDetailById(@PathVariable Long id) {
 		return ResponseEntity.ok(ApiResponse.ok(partnerService.findDetailById(id)));
 	}
